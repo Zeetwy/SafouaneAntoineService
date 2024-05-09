@@ -17,16 +17,16 @@
         </tr>
 
         <tr>
-            <td><label asp-for="CategoryId"></label></td>
+            <td><label asp-for="CategoryName"></label></td>
             <td>
-                <select asp-for="CategoryId">
-                    @foreach ((int id, string name) in (List<(int, string)>)ViewBag.Categories)
+                <select asp-for="CategoryName">
+                    @foreach (string name in (List<string>)ViewBag.Categories)
                     {
-                        <option value="@id">@name</option>
+                        <option value="@name">@name</option>
                     }
                 </select>
             </td>
-            <td><span asp-validation-for="CategoryId" class="text-danger"></span></td>
+            <td><span asp-validation-for="CategoryName" class="text-danger"></span></td>
         </tr>
         <tr>
             <td><a class="btn" asp-controller="ServiceOffer" asp-action="ManageOffers">Back</a></td>

@@ -67,7 +67,7 @@ namespace SafouaneAntoineService.Models
             return this.offers;
         }
 
-        public bool PublishOffer(ServiceOfferViewModel so, IServiceOfferDAL service_offer_dal)
+        public bool PublishOffer(ServiceOffer so, IServiceOfferDAL service_offer_dal)
         {
             return service_offer_dal.PublishOffer(this, so);
         }

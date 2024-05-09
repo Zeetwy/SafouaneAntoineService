@@ -2,6 +2,6 @@
 {
     public interface IServiceCategoryDAL
     {
-        public List<(int id, string name)> GetCategories();
+        public List<string> GetCategories();
     }
 }

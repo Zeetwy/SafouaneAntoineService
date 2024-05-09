@@ -12,11 +12,11 @@ namespace SafouaneAntoineService.DAL
             this.connection_string = connection_string;
         }
 
-        public List<(int id, string name)> GetCategories()
+        public List<string> GetCategories()
         {
-            const string query = "SELECT [id], [name] FROM [ServiceCategory]";
+            const string query = "SELECT [name] FROM [ServiceCategory]";
 
-            List<(int id, string name)> ret = new List<(int, string)>();
+            List<string> ret = new List<string>();
 
             using (SqlConnection connection = new SqlConnection(this.connection_string))
             {
@@ -26,7 +26,7 @@ namespace SafouaneAntoineService.DAL
                 {
                     while (reader.Read())
                     {
-                        ret.Add((reader.GetInt32("id"), reader.GetString("name")));
+                        ret.Add(reader.GetString("name"));
                     }
                 }
             }

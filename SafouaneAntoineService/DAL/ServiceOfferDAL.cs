@@ -46,9 +46,9 @@ namespace SafouaneAntoineService.DAL
             return ret;
         }
 
-        public bool PublishOffer(User user, ServiceOfferViewModel so)
+        public bool PublishOffer(User user, ServiceOffer so)
         {
-            const string query = "INSERT INTO [ServiceOffer] ([type], [description], [user_id], [category_id]) VALUES (@type, @description, @user_id, @category_id)";
+            const string query = "INSERT INTO [ServiceOffer] ([type], [description], [user_id], [category_id]) VALUES (@type, @description, @user_id, (SELECT [id] FROM [ServiceCategory] WHERE [name]=@category_name))";
 
             int rows_affected = 0;
 
@@ -57,9 +57,9 @@ namespace SafouaneAntoineService.DAL
                 SqlCommand cmd = new SqlCommand(query, connection);
 
                 cmd.Parameters.AddWithValue("type", so.Type);
-                cmd.Parameters.AddWithValue("description", so.Description);
+                cmd.Parameters.AddWithValue("description", so.Description??"");
                 cmd.Parameters.AddWithValue("user_id", user.Id);
-                cmd.Parameters.AddWithValue("category_id", so.CategoryId);
+                cmd.Parameters.AddWithValue("category_name", so.Category.Name);
 
                 connection.Open();
                 rows_affected = cmd.ExecuteNonQuery();

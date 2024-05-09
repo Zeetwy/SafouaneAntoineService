@@ -1,4 +1,5 @@
 ﻿using SafouaneAntoineService.DAL.IDAL;
+using SafouaneAntoineService.ViewModels;
 namespace SafouaneAntoineService.Models
 {
     public class ServiceOffer
@@ -33,6 +34,13 @@ namespace SafouaneAntoineService.Models
             this.type = type;
             this.description = description;
             this.category = category;
+        }
+
+        public ServiceOffer(ServiceOfferViewModel so)
+        {
+            this.type = so.Type;
+            this.description = so.Description;
+            this.category = new ServiceCategory(so.CategoryName);
         }
     }
 }

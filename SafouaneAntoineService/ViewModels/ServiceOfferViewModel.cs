@@ -6,7 +6,7 @@ namespace SafouaneAntoineService.ViewModels
     {
         private string type;
         private string? description;
-        private int category_id;
+        private string category_name;
 
         [Required(ErrorMessage = "Please enter the type of service."), StringLength(50, ErrorMessage = "Type length cannot exceed 50 characters.")]
         public string Type
@@ -22,10 +22,10 @@ namespace SafouaneAntoineService.ViewModels
         }
 
         [Required(ErrorMessage = "Please select a category for the offer")]
-        public int CategoryId
+        public string CategoryName
         {
-            get => this.category_id;
-            set => this.category_id = value;
+            get => this.category_name;
+            set => this.category_name = value;
         }
     }
 }

@@ -52,7 +52,9 @@ namespace SafouaneAntoineService.Controllers
                 return RedirectToAction("Authenticate", "User");
             }
             User user = JsonConvert.DeserializeObject<User>(user_session_string);
-            if (ModelState.IsValid && user.PublishOffer(so, this._serviceOffer))
+
+            ServiceOffer offer = new ServiceOffer(so);
+            if (ModelState.IsValid && user.PublishOffer(offer, this._serviceOffer))
             {
                 TempData["Message"] = "Offer published successfully.";
                 return RedirectToAction("ManageOffers", "ServiceOffer");

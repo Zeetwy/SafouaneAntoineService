@@ -1,0 +1,36 @@
+﻿@model SafouaneAntoineService.ViewModels.ServiceOfferViewModel
+@{
+	ViewData["Title"] = "Publish Offer";
+}
+<form method="post" asp-controller="ServiceOffer" asp-action="PublishOffer">
+    <table>
+        <tr>
+            <td><label asp-for="Type"></label></td>
+            <td><input asp-for="Type"></td>
+            <td><span asp-validation-for="Type" class="text-danger"></span></td>
+        </tr>
+
+        <tr>
+            <td><label asp-for="Description"></label></td>
+            <td><input type="text" asp-for="Description"></td>
+            <td><span asp-validation-for="Description" class="text-danger"></span></td>
+        </tr>
+
+        <tr>
+            <td><label asp-for="CategoryId"></label></td>
+            <td>
+                <select asp-for="CategoryId">
+                    @foreach ((int id, string name) in (List<(int, string)>)ViewBag.Categories)
+                    {
+                        <option value="@id">@name</option>
+                    }
+                </select>
+            </td>
+            <td><span asp-validation-for="CategoryId" class="text-danger"></span></td>
+        </tr>
+        <tr>
+            <td><a class="btn" asp-controller="ServiceOffer" asp-action="ManageOffers">Back</a></td>
+            <td><input class="btn" type="submit" value="Publish" /></td>
+        </tr>
+    </table>
+</form>

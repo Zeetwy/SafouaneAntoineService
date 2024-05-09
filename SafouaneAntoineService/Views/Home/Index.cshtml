@@ -1,0 +1,17 @@
+﻿﻿@{
+    ViewData["Title"] = "Welcome to carpool website!";
+}
+@if (!string.IsNullOrEmpty((string)TempData["Message"]))
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Welcome to our exchange service website ! </p>
+</div>
+<div class="text-center">
+    <a class="btn" style="border: 2px solid grey" asp-controller="User" asp-action="CreateAccount">Create Account </a>
+    <br />
+    <br />
+    <a class="btn" style="border: 2px solid grey" asp-controller="User" asp-action="Authenticate">Authenticate </a>
+</div>

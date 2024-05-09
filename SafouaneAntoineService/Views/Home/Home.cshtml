@@ -1,0 +1,10 @@
+﻿﻿@{
+    ViewData["Title"] = "Home";
+}
+@if (!string.IsNullOrEmpty((string)TempData["Message"]))
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+<div class="text-center">
+    <a class="btn" asp-controller="ServiceOffer" asp-action="ManageOffers">Offers</a>
+</div>

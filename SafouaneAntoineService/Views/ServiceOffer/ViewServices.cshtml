@@ -1,0 +1,28 @@
+﻿@model List<ServiceOffer>
+<!-- using Newtonsoft.Json; -->
+@if (!string.IsNullOrEmpty((string)TempData["Message"]))
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+<br />
+@("Welcome to the view services page : " + ViewData["User"])
+<br />
+
+<table class="table">
+    <tr>
+        <th>id</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+
+    @foreach (ServiceOffer s in Model)
+    {
+        <tr>
+            <td>@s.Id</td>
+            <td>@s.Type</td>
+            <td>@s.Description</td>
+            <td> <a asp-controller="ServiceOffer" asp-action="Details" asp-route-id="@s.Id">View details</a></td>
+        </tr>
+    }
+</table>

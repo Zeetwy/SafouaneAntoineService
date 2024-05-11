@@ -16,6 +16,44 @@ namespace SafouaneAntoineService.Controllers
             this._serviceOffer = _serviceOffer;
             this._serviceCategory = _serviceCategory;
         }
+
+        public IActionResult ViewServices()
+        {
+            string? userSession = HttpContext.Session.GetString("User");
+            if (string.IsNullOrEmpty(userSession))
+            {
+                TempData["Message"] = "Please Authenticate in first";
+                return RedirectToAction("Authenticate", "User");
+            }
+            User u = JsonConvert.DeserializeObject<User>(userSession);
+
+            ViewData["user"] = u.Username;
+
+            return View(ServiceOffer.GetServices(_serviceOffer));
+           
+        }
+
+        public IActionResult Details(int id)
+        {
+            // Appelle la méthode GetService pour obtenir les détails du service avec l'ID spécifié
+            ServiceOffer service = _serviceOffer.GetService(id);
+
+            //on récupère la chaîne de session appelée 'User'
+            string? user_session_string = HttpContext.Session.GetString("User");
+
+            // on vérifie si cette chaîne de session est nulle ou vide 
+            if (string.IsNullOrEmpty(user_session_string))
+            {
+                //comme aucun utilisateur n'est actuellement authentifié, on définit un message dans TempData indiquant à l'utilisateur qu'il doit être connecté pour voir la page.
+                TempData["Message"] = "You need to be logged in to view this page.";
+                return RedirectToAction("Authenticate", "User");
+            }
+            //On désérialise la chaîne JSON en un objet User à l'aide de JsonConvert. Cela permet d'obtenir les info de l'user connecté à partir de la session.
+            User user = JsonConvert.DeserializeObject<User>(user_session_string);
+
+            // Si tout est correct, passe le service à la vue pour l'affichage
+            return View(service);
+        }
         public IActionResult ManageOffers()
         {
             string? user_session_string = HttpContext.Session.GetString("User");

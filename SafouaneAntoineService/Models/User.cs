@@ -57,21 +57,6 @@ namespace SafouaneAntoineService.Models
             set { email = value; }
         }
 
-        public List<ServiceOffer> GetOffers(IServiceOfferDAL service_offer_DAL)
-        {
-            if (this.offers != null)
-            {
-                return this.offers;
-            }
-            this.offers = service_offer_DAL.GetOffersByUser(this);
-            return this.offers;
-        }
-
-        public bool PublishOffer(ServiceOffer so, IServiceOfferDAL service_offer_dal)
-        {
-            return service_offer_dal.PublishOffer(this, so);
-        }
-
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password, ErrorMessage = "Invalid password.")]
         [RegularExpression(@"^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$", ErrorMessage = "Password must contain at least 1 uppercase, 1 lowercase, 1 digit, 1 special character, and be at least 10 characters long.")]
@@ -115,6 +100,21 @@ namespace SafouaneAntoineService.Models
         public bool SaveAccount(IUserDAL userDAL)
         {
             return userDAL.SaveAccount(this);
+        }
+
+        public List<ServiceOffer> GetOffers(IServiceOfferDAL service_offer_DAL)
+        {
+            if (this.offers != null)
+            {
+                return this.offers;
+            }
+            this.offers = service_offer_DAL.GetOffersByUser(this);
+            return this.offers;
+        }
+
+        public bool PublishOffer(ServiceOffer so, IServiceOfferDAL service_offer_dal)
+        {
+            return service_offer_dal.PublishOffer(this, so);
         }
 
     }

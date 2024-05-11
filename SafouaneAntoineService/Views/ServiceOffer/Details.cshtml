@@ -1,0 +1,30 @@
+﻿@model ServiceOffer
+
+<!-- 
+if (!string.IsNullOrEmpty((string)TempData["Message"]))
+{
+<div class="alert alert-success">TempData["Message"]</div>
+} -->
+@if (Model != null && Model.Id > 0)
+{
+    <h1>Détails du service n° @Model.Id</h1>
+
+    <table class="table">
+        <tr>
+            <td>Type</td>
+            <td>Description</td>
+            <td>Publié par</td>
+            <td>Catégorie</td>
+        </tr>
+        <tr>
+            <td>@Model.Type</td>
+            <td>@Model.Description</td>
+            <td>@Model.Provider.Firstname @Model.Provider.Lastname</td>
+            <td>@Model.Category.Name</td>
+        </tr>
+    </table>
+}
+else
+{
+    <p>Aucun service trouvé.</p>
+}

@@ -65,9 +65,7 @@ namespace SafouaneAntoineService.Controllers
             // Si l'authentification réussit, les informations de l'utilisateur (u) sont sérialisées en JSON à l'aide de la bibliothèque Json.NET (JsonConvert.SerializeObject) et stockées dans la session avec la clé "User".
             HttpContext.Session.SetString("User", JsonConvert.SerializeObject(u));
 
-            //return Redirect("/Carpool/SeeAllOffers");
-
-            return RedirectToAction("Home", "Home");
+            return Redirect("/ServiceOffer/ViewServices");
         }
 
         public IActionResult Index()

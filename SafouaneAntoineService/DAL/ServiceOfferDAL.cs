@@ -37,7 +37,7 @@ namespace SafouaneAntoineService.DAL
                             ServiceOffer serviceOffer = new ServiceOffer(
                                 reader.GetInt32("id"),
                                 reader.GetString("type"),
-                                reader.GetString("description")
+                                reader.IsDBNull("description") ? null : reader.GetString("description")
                             );
                             serviceOffers.Add(serviceOffer);
                         }
@@ -79,7 +79,7 @@ namespace SafouaneAntoineService.DAL
                         serviceOffer = new ServiceOffer(
                             reader.GetInt32("id"),
                             reader.GetString("type"),
-                            reader.GetString("description"),
+                            reader.IsDBNull("description") ? null : reader.GetString("description"),
                             new ServiceCategory(reader.GetString("name")),
                             new User(
                                 reader.GetInt32("user_id"),
@@ -125,7 +125,7 @@ namespace SafouaneAntoineService.DAL
                             new ServiceOffer(
                                 reader.GetInt32("id"),
                                 reader.GetString("type"),
-                                reader.GetString("description"),
+                                reader.IsDBNull("description") ? null : reader.GetString("description"),
                                 new ServiceCategory(reader.GetString("name")),
                                 user
                             )

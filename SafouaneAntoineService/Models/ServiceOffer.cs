@@ -44,7 +44,7 @@ namespace SafouaneAntoineService.Models
         }
 
         //Constructeur pour pouvoir afficher les détails d'un service : 
-        public ServiceOffer(int id, string type, string description, ServiceCategory? category = null, User? provider = null)
+        public ServiceOffer(int id, string type, string? description, ServiceCategory? category = null, User? provider = null)
         {
             this.id = id;
             this.type = type;

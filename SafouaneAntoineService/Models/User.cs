@@ -2,6 +2,7 @@
 using SafouaneAntoineService.DAL.IDAL;
 using SafouaneAntoineService.ViewModels;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace SafouaneAntoineService.Models
 {
@@ -11,7 +12,7 @@ namespace SafouaneAntoineService.Models
         private string lastname;
         private string firstname;
         private string username;
-        public int timecredits = 10;
+        private int timecredits = 10;
         private string email;
         private string password;
 
@@ -67,6 +68,9 @@ namespace SafouaneAntoineService.Models
             get { return password; }
             set { password = value; }
         }
+
+        [JsonConstructor]
+        public User() { } // Needed to deserialize JSON from session
 
         public User(int id, string lastname, string firstname, string? username = null, int timecredits = 0, string? email = null, string? password = null)
         {

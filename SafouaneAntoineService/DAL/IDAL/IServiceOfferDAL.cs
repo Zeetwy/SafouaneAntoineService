@@ -9,6 +9,6 @@ namespace SafouaneAntoineService.DAL.IDAL
         ServiceOffer GetService(int id);
 
         public List<ServiceOffer> GetOffersByUser(User user);
-        public bool PublishOffer(User user, ServiceOffer so);
+        public bool PublishOffer(ServiceOffer so);
     }
 }

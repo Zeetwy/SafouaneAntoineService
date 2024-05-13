@@ -54,7 +54,7 @@ namespace SafouaneAntoineService.Controllers
         public IActionResult Authenticate(string username, string password)
         {
             //On appelle la méthode statique Authenticate de la classe User pour tenter d'authentifier l'utilisateur en utilisant les informations fournies. Le résultat est stocké dans la variable u
-            User u = Models.User.Authenticate(username, password, _user);
+            User? u = Models.User.Authenticate(username, password, _user);
 
             // si l'authentification a échoué, l'user est redirigé vers la page d'authentification pour qu'il puisse réessayer.
             if (u is null)

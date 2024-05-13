@@ -3,12 +3,15 @@
     var successMessage = TempData["SuccessMessage"] as string;
 }
 
-@if (!string.IsNullOrEmpty(successMessage))
+@if (Model != null && Model.Id > 0)
 {
     <div class="alert alert-success">
         @successMessage
     </div>
 }
-
-
-<a href="@Url.Action("Index", "Home")" class="btn btn-primary">Retour à l'accueil</a>
+else
+{
+    <div class="alert alert-danger">
+        Une erreur s'est produite lors de la récupération des détails du service. Veuillez réessayer plus tard.
+    </div>
+}

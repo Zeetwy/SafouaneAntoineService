@@ -8,55 +8,43 @@ namespace SafouaneAntoineService.Models
     {
         private int id;
         private string type;
-        private string description;
-        private User provider;
-        private ServiceCategory category;
-
-        /* public int Id
-         {
-             get { return this.id; }
-         } */
-
-        //Mieux d'écrire comme ça : 
+        private string? description;
+        private User? provider;
+        private ServiceCategory? category;
 
         public int Id
         {
-            get { return id; }
-            set { id = value; }
+            get => id;
+            private set => id = value;
         }
 
         [Required(ErrorMessage = "Empty Field!.")]
         public string Type
         {
-            get { return type; }
-            set { type = value; }
+            get => type;
+            private set => type = value;
         }
 
         [Required(ErrorMessage = "Empty Field!.")]
-        public string Description
+        public string? Description
         {
-            get { return description; }
-            set { description = value; }
+            get => description;
+            private set => description = value;
         }
 
         public User Provider
         {
-            get { return provider; }
-            set { provider = value; }
+            get => provider ?? throw new Exception("No provider was set.");
+            private set => provider = value;
         }
         public ServiceCategory Category
         {
-            get { return category; }
-            set { category = value; }
-        }
-
-        public ServiceOffer()
-        {
-
+            get => category ?? throw new Exception("No category was set.");
+            set => category = value;
         }
 
         //Constructeur pour pouvoir afficher les détails d'un service : 
-        public ServiceOffer(int id, string type, string description, User provider, ServiceCategory category)
+        public ServiceOffer(int id, string type, string description, ServiceCategory? category = null, User? provider = null)
         {
             this.id = id;
             this.type = type;
@@ -65,27 +53,17 @@ namespace SafouaneAntoineService.Models
             this.category = category;
         }
 
-        public ServiceOffer(int id, string type, string description)
-        {
-            this.id = id;
-            this.type = type;
-            this.description = description;
-        }
-
-        //Constructeur pour pouvoir publier une offre : 
-        public ServiceOffer(int id, string type, string description, ServiceCategory category)
-        {
-            this.id = id;
-            this.type = type;
-            this.description = description;
-            this.category = category;
-        }
-
-        public ServiceOffer(ServiceOfferViewModel so)
+        public ServiceOffer(ServiceOfferViewModel so, User user)
         {
             this.type = so.Type;
             this.description = so.Description;
             this.category = new ServiceCategory(so.CategoryName);
+            this.provider = user;
+        }
+
+        public bool Publish(IServiceOfferDAL service_offer_dal)
+        {
+            return service_offer_dal.PublishOffer(this);
         }
 
         public static List<ServiceOffer> GetServices(IServiceOfferDAL serviceoffer)
@@ -99,13 +77,15 @@ namespace SafouaneAntoineService.Models
             return serviceOfferDAL.GetService(id);
         }
 
-
         public void MakeRequest(User customer, INotificationDAL notification_DAL)
         {
-            // Créer le message à envoyer dans la notification
-            string message = $"Le client {customer.Firstname} {customer.Lastname} a fait une demande pour votre service.";
-            Notification notif = new Notification(provider, message);
-            notif.Send(notification_DAL);
+            if (customer.Id != this.Provider.Id)
+            {
+                // Créer le message à envoyer dans la notification
+                string message = $"Le client {customer.Firstname} {customer.Lastname} a fait une demande pour votre service.";
+                Notification notif = new Notification(Provider, message);
+                notif.Send(notification_DAL);
+            }
         }
     }
 }

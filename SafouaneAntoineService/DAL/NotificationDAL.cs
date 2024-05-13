@@ -15,7 +15,7 @@ namespace SafouaneAntoineService.DAL
 
         public void SendNotification(Notification notification)
         {
-            string query = "INSERT INTO [Notification] ([content], [user_id]) VALUES (@content, @user_id)";
+            const string query = "INSERT INTO [Notification] ([content], [user_id]) VALUES (@content, @user_id)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

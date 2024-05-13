@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
 using SafouaneAntoineService.DAL.IDAL;
+using SafouaneAntoineService.Models;
 
 namespace SafouaneAntoineService.DAL
 {
@@ -12,11 +13,11 @@ namespace SafouaneAntoineService.DAL
             this.connection_string = connection_string;
         }
 
-        public List<string> GetCategories()
+        public List<ServiceCategory> GetCategories()
         {
             const string query = "SELECT [name] FROM [ServiceCategory]";
 
-            List<string> ret = new List<string>();
+            List<ServiceCategory> ret = new List<ServiceCategory>();
 
             using (SqlConnection connection = new SqlConnection(this.connection_string))
             {
@@ -26,7 +27,7 @@ namespace SafouaneAntoineService.DAL
                 {
                     while (reader.Read())
                     {
-                        ret.Add(reader.GetString("name"));
+                        ret.Add(new ServiceCategory(reader.GetString("name")));
                     }
                 }
             }

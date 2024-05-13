@@ -1,7 +1,9 @@
-﻿namespace SafouaneAntoineService.DAL.IDAL
+﻿using SafouaneAntoineService.Models;
+
+namespace SafouaneAntoineService.DAL.IDAL
 {
     public interface IServiceCategoryDAL
     {
-        public List<string> GetCategories();
+        public List<ServiceCategory> GetCategories();
     }
 }

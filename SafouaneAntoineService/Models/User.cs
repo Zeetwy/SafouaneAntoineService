@@ -68,19 +68,15 @@ namespace SafouaneAntoineService.Models
             set { password = value; }
         }
 
-        public User()
-        {
-        }
-
-        public User(int id, string lastname, string firstname, string username, int timecredits, string email, string password)
+        public User(int id, string lastname, string firstname, string? username = null, int timecredits = 0, string? email = null, string? password = null)
         {
             this.id = id;
             this.lastname = lastname;
             this.firstname = firstname;
-            this.username = username;
+            this.username = username ?? string.Empty;
             this.timecredits = timecredits;
-            this.email = email;
-            this.password = password;
+            this.email = email ?? string.Empty;
+            this.password = password ?? string.Empty;
         }
 
         // constructeur pour mon UserViewModel
@@ -95,7 +91,7 @@ namespace SafouaneAntoineService.Models
         }
 
         //ces méthodes délèguent la logique métier à une implémentation spécifique de l'interface IUserDAL, qui est injectée en tant que dépendance.
-        public static User Authenticate(string username, string password, IUserDAL userDAL)
+        public static User? Authenticate(string username, string password, IUserDAL userDAL)
         {
             return userDAL.Authenticate(username, password);
         }
@@ -113,11 +109,5 @@ namespace SafouaneAntoineService.Models
             this.offers = service_offer_DAL.GetOffersByUser(this);
             return this.offers;
         }
-
-        public bool PublishOffer(ServiceOffer so, IServiceOfferDAL service_offer_dal)
-        {
-            return service_offer_dal.PublishOffer(this, so);
-        }
-
     }
 }

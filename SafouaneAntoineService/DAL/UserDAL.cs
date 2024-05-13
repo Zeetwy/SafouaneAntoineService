@@ -20,10 +20,10 @@ namespace SafouaneAntoineService.DAL
             this.connectionString = connectionString;
         }
 
-        public User Authenticate(string username, string password)
+        public User? Authenticate(string username, string password)
         {
-            User u = null;
-            string query = "SELECT * FROM [User] where Username = @username and Password = @password";
+            User? u = null;
+            const string query = "SELECT * FROM [User] where Username = @username and Password = @password";
 
             using (SqlConnection connection = new SqlConnection(connectionString)) //on crée la chaîne de connection 
             {
@@ -38,13 +38,17 @@ namespace SafouaneAntoineService.DAL
 
                 using (SqlDataReader reader = cmd.ExecuteReader()) //on exécute notre commande SQL avec executeReader
                 {
-                    while (reader.Read()) //Pour chaque enregistrement lu dans le résultat de la requête, un nouvel objet User est créé en utilisant les valeurs lues dans la BD
+                    if (reader.Read()) //Pour chaque enregistrement lu dans le résultat de la requête, un nouvel objet User est créé en utilisant les valeurs lues dans la BD
                     {
-                        u = new User(reader.GetInt32("Id"), reader.GetString("Lastname"),
-                                     reader.GetString("Firstname"), reader.GetString("Username"),
-                                     reader.GetInt32("Timecredits"), reader.GetString("Email"),
-                                     null); //le mdp n'est pas inclus dans la requête SQL pour des raisons de sécurité. Il est généralement comparé à celui fourni par l'utilisateur à l'aide d'une vérification de hachage.
-
+                        u = new User(
+                            reader.GetInt32("Id"),
+                            reader.GetString("Lastname"),
+                            reader.GetString("Firstname"),
+                            reader.GetString("Username"),
+                            reader.GetInt32("Timecredits"),
+                            reader.GetString("Email"),
+                            null //le mdp n'est pas inclus dans la requête SQL pour des raisons de sécurité. Il est généralement comparé à celui fourni par l'utilisateur à l'aide d'une vérification de hachage.
+                        );
                     }
                 }
             }
@@ -53,16 +57,16 @@ namespace SafouaneAntoineService.DAL
 
         public bool SaveAccount(User u)
         {
-            // Initialisation des variables de succès et de recherche
+            // Initialisation de la variable de succès
             bool success = false;
-            bool find = false;
 
             // Définition de la requête SQL pour rechercher un utilisateur existant
-            string query = "INSERT INTO [User](LastName, Firstname, Username, Password, Email, Timecredits)" +
-                " VALUES (@LastName, @Firstname, @Username, @Password, @Email, @Timecredits) ";
+            const string query =
+@"INSERT INTO [User](LastName, Firstname, Username, Password, Email, Timecredits)
+    VALUES (@LastName, @Firstname, @Username, @Password, @Email, @Timecredits)";
 
             // Requête SQL pour vérifier si un utilisateur existe déjà avec le même nom d'utilisateur ou la même adresse e-mail
-            string query2 = "SELECT * FROM [User] WHERE Username = @Username OR Email = @Email";
+            const string query2 = "SELECT * FROM [User] WHERE Username = @Username OR Email = @Email";
 
             // Ouverture de la connexion à la base de données
             using (SqlConnection connection = new SqlConnection(this.connectionString))

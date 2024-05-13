@@ -20,9 +20,9 @@
             <td><label asp-for="CategoryName"></label></td>
             <td>
                 <select asp-for="CategoryName">
-                    @foreach (string name in (List<string>)ViewBag.Categories)
+                    @foreach (ServiceCategory category in (List<ServiceCategory>)ViewBag.Categories)
                     {
-                        <option value="@name">@name</option>
+                        <option value="@category.Name">@category.Name</option>
                     }
                 </select>
             </td>

@@ -23,6 +23,7 @@ if (!string.IsNullOrEmpty((string)TempData["Message"]))
             <td>@Model.Category.Name</td>
         </tr>
     </table>
+    <a href="@Url.Action("MakeARequest", "ServiceOffer", new { id = Model.Id })">Faire une demande</a>
 }
 else
 {

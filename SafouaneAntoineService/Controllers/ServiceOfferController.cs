@@ -10,12 +10,42 @@ namespace SafouaneAntoineService.Controllers
     {
         private readonly IServiceOfferDAL _serviceOffer;
         private readonly IServiceCategoryDAL _serviceCategory;
+       // private readonly IUserDAL _user;
 
         public ServiceOfferController(IServiceOfferDAL _serviceOffer, IServiceCategoryDAL _serviceCategory)
         {
             this._serviceOffer = _serviceOffer;
             this._serviceCategory = _serviceCategory;
+           // _user = user;
         }
+
+        public IActionResult MakeARequest()
+        {
+            // Récupérer les données de session de l'utilisateur
+            string userSession = HttpContext.Session.GetString("User");
+
+            // Vérifier si l'utilisateur est authentifié
+            if (string.IsNullOrEmpty(userSession))
+            {
+                TempData["Message"] = "Please Authenticate in first";
+                return RedirectToAction("Authenticate", "User");
+            }
+
+            // Désérialiser les données de session en objet User
+            User customer = JsonConvert.DeserializeObject<User>(userSession);
+
+            // Créer une instance de ServiceOffer (assurez-vous d'injecter IServiceOfferDAL dans votre contrôleur)
+            ServiceOffer serviceOffer = new ServiceOffer();
+
+            // Appeler la méthode MakeRequest sur l'instance de ServiceOffer
+            serviceOffer.MakeRequest(customer);
+
+            TempData["SuccessMessage"] = "Request sent successfully.";
+            //return RedirectToAction("Index", "Home");
+            //return RedirectToAction("Request", "ServiceOffer");
+            return View("Request");
+        }
+
 
         public IActionResult ViewServices()
         {
@@ -54,6 +84,15 @@ namespace SafouaneAntoineService.Controllers
             // Si tout est correct, passe le service à la vue pour l'affichage
             return View(service);
         }
+
+
+        //Make a request : 
+
+
+
+        //....
+
+
         public IActionResult ManageOffers()
         {
             string? user_session_string = HttpContext.Session.GetString("User");

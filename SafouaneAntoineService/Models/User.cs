@@ -17,6 +17,8 @@ namespace SafouaneAntoineService.Models
 
         private List<ServiceOffer>? offers;
 
+        private List<Notification>? notifications;
+
         public int Id
         {
             get { return id; }

@@ -14,7 +14,7 @@ builder.Services.AddTransient<IUserDAL>(ud => new UserDAL(connectionString)); /*
                                                                               Elle spécifie également que chaque fois qu'une dépendance de type IUserDAL est requise, une nouvelle instance de UserDAL sera créée avec la chaû‹e de connexion spécifiée. */
 builder.Services.AddTransient<IServiceOfferDAL>(sod => new ServiceOfferDAL(connectionString));
 builder.Services.AddTransient<IServiceCategoryDAL>(scd => new ServiceCategoryDAL(connectionString));
-
+builder.Services.AddTransient<INotificationDAL>(scd => new NotificationDAL(connectionString));
 builder.Services.AddDistributedMemoryCache(); //ette ligne ajoute le service de cache distribuEen mémoire El'application. Ce service est utilisEpour stocker temporairement des données en mémoire pour améliorer les performances de l'application.
 
 // Cette ligne configure le service de session dans l'application.

@@ -1,0 +1,14 @@
+﻿@model ServiceOffer
+@{
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success">
+        @successMessage
+    </div>
+}
+
+
+<a href="@Url.Action("Index", "Home")" class="btn btn-primary">Retour à l'accueil</a>

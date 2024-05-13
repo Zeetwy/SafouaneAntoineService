@@ -10,12 +10,45 @@ namespace SafouaneAntoineService.Controllers
     {
         private readonly IServiceOfferDAL _serviceOffer;
         private readonly IServiceCategoryDAL _serviceCategory;
+        private readonly INotificationDAL _notification;
+       // private readonly IUserDAL _user;
 
-        public ServiceOfferController(IServiceOfferDAL _serviceOffer, IServiceCategoryDAL _serviceCategory)
+        public ServiceOfferController(IServiceOfferDAL _serviceOffer, IServiceCategoryDAL _serviceCategory, INotificationDAL _notification)
         {
             this._serviceOffer = _serviceOffer;
             this._serviceCategory = _serviceCategory;
+            this._notification = _notification;
+           // _user = user;
         }
+
+        [HttpGet]
+        public IActionResult MakeARequest(int id)
+        {
+            // Récupérer les données de session de l'utilisateur
+            string userSession = HttpContext.Session.GetString("User");
+
+            // Vérifier si l'utilisateur est authentifié
+            if (string.IsNullOrEmpty(userSession))
+            {
+                TempData["Message"] = "Please Authenticate in first";
+                return RedirectToAction("Authenticate", "User");
+            }
+
+            // Désérialiser les données de session en objet User
+            User customer = JsonConvert.DeserializeObject<User>(userSession);
+
+            // Créer une instance de ServiceOffer (assurez-vous d'injecter IServiceOfferDAL dans votre contrôleur)
+            ServiceOffer serviceOffer = this._serviceOffer.GetService(id);
+
+            // Appeler la méthode MakeRequest sur l'instance de ServiceOffer
+            serviceOffer.MakeRequest(customer, this._notification);
+
+            TempData["SuccessMessage"] = "Request sent successfully.";
+            //return RedirectToAction("Index", "Home");
+            //return RedirectToAction("Request", "ServiceOffer");
+            return View("Request");
+        }
+
 
         public IActionResult ViewServices()
         {
@@ -54,6 +87,15 @@ namespace SafouaneAntoineService.Controllers
             // Si tout est correct, passe le service à la vue pour l'affichage
             return View(service);
         }
+
+
+        //Make a request : 
+
+
+
+        //....
+
+
         public IActionResult ManageOffers()
         {
             string? user_session_string = HttpContext.Session.GetString("User");

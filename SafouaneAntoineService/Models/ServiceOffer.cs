@@ -100,12 +100,12 @@ namespace SafouaneAntoineService.Models
         }
 
 
-        public void MakeRequest(User customer)
+        public void MakeRequest(User customer, INotificationDAL notification_DAL)
         {
             // Créer le message à envoyer dans la notification
             string message = $"Le client {customer.Firstname} {customer.Lastname} a fait une demande pour votre service.";
-
-            Notification.SendNotification(provider, message);
+            Notification notif = new Notification(provider, message);
+            notif.Send(notification_DAL);
         }
     }
 }

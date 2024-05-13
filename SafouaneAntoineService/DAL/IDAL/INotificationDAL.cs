@@ -4,6 +4,6 @@ namespace SafouaneAntoineService.DAL.IDAL
 {
     public interface INotificationDAL
     {
-        public void SendNotification(User user, string message);
+        public void SendNotification(Notification notification);
     }
 }

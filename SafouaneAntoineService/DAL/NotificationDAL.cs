@@ -13,18 +13,15 @@ namespace SafouaneAntoineService.DAL
             this.connectionString = connectionString;
         }
 
-        public void SendNotification(User user, string message)
+        public void SendNotification(Notification notification)
         {
-            
-            string content = $"{message}. Voici l'e-mail de l'utilisateur : {user.Email}";
-
-           
-            string query = "INSERT INTO Notification (content) VALUES (@content)";
+            string query = "INSERT INTO [Notification] ([content], [user_id]) VALUES (@content, @user_id)";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@content", content);
+                command.Parameters.AddWithValue("content", notification.Content);
+                command.Parameters.AddWithValue("user_id", notification.Target.Id);
 
                 connection.Open();
                 command.ExecuteNonQuery();

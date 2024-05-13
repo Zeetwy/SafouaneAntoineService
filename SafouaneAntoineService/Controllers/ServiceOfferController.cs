@@ -10,16 +10,19 @@ namespace SafouaneAntoineService.Controllers
     {
         private readonly IServiceOfferDAL _serviceOffer;
         private readonly IServiceCategoryDAL _serviceCategory;
+        private readonly INotificationDAL _notification;
        // private readonly IUserDAL _user;
 
-        public ServiceOfferController(IServiceOfferDAL _serviceOffer, IServiceCategoryDAL _serviceCategory)
+        public ServiceOfferController(IServiceOfferDAL _serviceOffer, IServiceCategoryDAL _serviceCategory, INotificationDAL _notification)
         {
             this._serviceOffer = _serviceOffer;
             this._serviceCategory = _serviceCategory;
+            this._notification = _notification;
            // _user = user;
         }
 
-        public IActionResult MakeARequest()
+        [HttpGet]
+        public IActionResult MakeARequest(int id)
         {
             // Récupérer les données de session de l'utilisateur
             string userSession = HttpContext.Session.GetString("User");
@@ -35,10 +38,10 @@ namespace SafouaneAntoineService.Controllers
             User customer = JsonConvert.DeserializeObject<User>(userSession);
 
             // Créer une instance de ServiceOffer (assurez-vous d'injecter IServiceOfferDAL dans votre contrôleur)
-            ServiceOffer serviceOffer = new ServiceOffer();
+            ServiceOffer serviceOffer = this._serviceOffer.GetService(id);
 
             // Appeler la méthode MakeRequest sur l'instance de ServiceOffer
-            serviceOffer.MakeRequest(customer);
+            serviceOffer.MakeRequest(customer, this._notification);
 
             TempData["SuccessMessage"] = "Request sent successfully.";
             //return RedirectToAction("Index", "Home");

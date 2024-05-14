@@ -1,13 +1,8 @@
-﻿@model ServiceOffer
+﻿@model SafouaneAntoineService.ViewModels.ServiceDetailsViewModel
 
-<!-- 
-if (!string.IsNullOrEmpty((string)TempData["Message"]))
+@if (Model.ServiceOffer != null && Model.ServiceOffer.Id > 0)
 {
-<div class="alert alert-success">TempData["Message"]</div>
-} -->
-@if (Model != null && Model.Id > 0)
-{
-    <h1>Détails du service n° @Model.Id</h1>
+    <h1>Détails du service n° @Model.ServiceOffer.Id</h1>
 
     <table class="table">
         <tr>
@@ -17,13 +12,18 @@ if (!string.IsNullOrEmpty((string)TempData["Message"]))
             <td>Catégorie</td>
         </tr>
         <tr>
-            <td>@Model.Type</td>
-            <td>@Model.Description</td>
-            <td>@Model.Provider.Firstname @Model.Provider.Lastname</td>
-            <td>@Model.Category.Name</td>
+            <td>@Model.ServiceOffer.Type</td>
+            <td>@Model.ServiceOffer.Description</td>
+            <td>@Model.ServiceOffer.Provider.Firstname @Model.ServiceOffer.Provider.Lastname</td>
+            <td>@Model.ServiceOffer.Category.Name</td>
+            <td>
+                @if (Model.CurrentUser != null && Model.CurrentUser.Id != Model.ServiceOffer.Provider.Id)
+                {
+                    <a asp-controller="ServiceOffer" asp-action="MakeARequest" asp-route-id="@Model.ServiceOffer.Id">Faire une demande</a>
+                }
+            </td>
         </tr>
     </table>
-    <a href="@Url.Action("MakeARequest", "ServiceOffer", new { id = Model.Id })">Faire une demande</a>
 }
 else
 {

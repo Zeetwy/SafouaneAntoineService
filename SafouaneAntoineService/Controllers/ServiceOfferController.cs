@@ -63,15 +63,25 @@ namespace SafouaneAntoineService.Controllers
         [HttpGet]
         public IActionResult Details(int id)
         {
-            // Appelle la méthode GetService pour obtenir les détails du service avec l'ID spécifié
-            ServiceOffer? service = _serviceOffer.GetService(id);
+            User? currentUser = GetUserLoggedIn();
+            if (currentUser == null)
+            {
+                return NeedToBeLoggedIn();
+            }
 
-            if (GetUserLoggedIn() is null) { return NeedToBeLoggedIn(); }
+            ServiceOffer? serviceOffer = this._serviceOffer.GetService(id);
 
-            // Si tout est correct, passe le service à la vue pour l'affichage
-            return View(service);
+            // return View(new { ServiceOffer = serviceOffer, CurrentUser = currentUser });
+            ServiceDetailsViewModel svm = new ServiceDetailsViewModel
+            {
+                ServiceOffer = serviceOffer,
+                CurrentUser = currentUser
+            };
+
+            return View(svm);
         }
 
+       
         public IActionResult ManageOffers()
         {
             User? user = GetUserLoggedIn();

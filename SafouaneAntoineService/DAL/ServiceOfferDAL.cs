@@ -2,7 +2,6 @@
 using System.Data.SqlClient;
 using SafouaneAntoineService.DAL.IDAL;
 using SafouaneAntoineService.Models;
-using SafouaneAntoineService.ViewModels;
 
 namespace SafouaneAntoineService.DAL
 {
@@ -171,18 +170,18 @@ namespace SafouaneAntoineService.DAL
             return rows_affected > 0;
         }
 
-        public bool RequestService(ServiceOffer offer,User customer)
+        public bool RequestService(ServiceOffer offer, User customer)
         {
             const string query =
-        @"INSERT INTO [ServiceRendered] ([Status], [Date], [NumberOfHours], [serviceOffer_id], [customer_id])
-            VALUES (0, NULL, NULL, @serviceOfferId, @customerId)";
+        $@"INSERT INTO [ServiceRendered] ([Status], [Date], [NumberOfHours], [serviceOffer_id], [customer_id])
+            VALUES (@status, NULL, NULL, @serviceOfferId, @customerId)";
 
             int rows_affected = 0;
 
             using (SqlConnection connection = new SqlConnection(this.connection_string))
             {
                 SqlCommand cmd = new SqlCommand(query, connection);
-
+                cmd.Parameters.AddWithValue("status", (int)ServiceRendered.Status.Requested);
                 cmd.Parameters.AddWithValue("serviceOfferId", offer.Id);
                 cmd.Parameters.AddWithValue("customerId", customer.Id);
 
@@ -196,7 +195,7 @@ namespace SafouaneAntoineService.DAL
         {
             const string query =
         @"SELECT COUNT([id]) AS ""RequestedCount"" FROM [ServiceRendered]
-            WHERE [Status] = 0
+            WHERE [Status] = @status
             AND [customer_id] = @customerId
             AND [serviceOffer_id] = @serviceOfferId";
 
@@ -206,6 +205,7 @@ namespace SafouaneAntoineService.DAL
             {
                 SqlCommand cmd = new SqlCommand(query, connection);
 
+                cmd.Parameters.AddWithValue("status", (int)ServiceRendered.Status.Requested);
                 cmd.Parameters.AddWithValue("serviceOfferId", offer.Id);
                 cmd.Parameters.AddWithValue("customerId", customer.Id);
 

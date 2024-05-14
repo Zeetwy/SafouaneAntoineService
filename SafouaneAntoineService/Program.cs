@@ -15,6 +15,7 @@ builder.Services.AddTransient<IUserDAL>(ud => new UserDAL(connectionString)); /*
 builder.Services.AddTransient<IServiceOfferDAL>(sod => new ServiceOfferDAL(connectionString));
 builder.Services.AddTransient<IServiceCategoryDAL>(scd => new ServiceCategoryDAL(connectionString));
 builder.Services.AddTransient<INotificationDAL>(nd => new NotificationDAL(connectionString));
+builder.Services.AddTransient<IServiceRenderedDAL>(srd => new ServiceRenderedDAL(connectionString));
 builder.Services.AddDistributedMemoryCache(); //ette ligne ajoute le service de cache distribuÅEen mÈmoire ÅEl'application. Ce service est utilisÅEpour stocker temporairement des donnÈes en mÈmoire pour amÈliorer les performances de l'application.
 
 // Cette ligne configure le service de session dans l'application.

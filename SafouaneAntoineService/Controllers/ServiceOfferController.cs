@@ -113,9 +113,9 @@ namespace SafouaneAntoineService.Controllers
         }
 
         [HttpGet]
-        public string DeleteOffer(int id)
+        public IActionResult DeleteOffer(int id)
         {
-            return id.ToString();
+            return View(); // TODO
         }
     }
 }

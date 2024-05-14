@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using SafouaneAntoineService.DAL.IDAL;
 using SafouaneAntoineService.Models;
 using SafouaneAntoineService.ViewModels;
@@ -19,27 +18,11 @@ namespace SafouaneAntoineService.Controllers
             this._notification = _notification;
         }
 
-        private User? GetUserLoggedIn()
-        {
-            string? user_session_string = HttpContext.Session.GetString("User");
-            if (string.IsNullOrEmpty(user_session_string))
-            {
-                return null;
-            }
-            return JsonConvert.DeserializeObject<User>(user_session_string);
-        }
-
-        private IActionResult NeedToBeLoggedIn()
-        {
-            TempData["Message"] = "You need to be logged in to view this page.";
-            return RedirectToAction("Authenticate", "User");
-        }
-
         [HttpGet]
         public IActionResult MakeARequest(int id)
         {
-            User? customer = GetUserLoggedIn();
-            if (customer is null) { return NeedToBeLoggedIn(); }
+            User? customer = ControllerHelper.GetUserLoggedIn(this);
+            if (customer is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
 
             // Créer une instance de ServiceOffer (assurez-vous d'injecter IServiceOfferDAL dans votre contrôleur)
             ServiceOffer? serviceOffer = this._serviceOffer.GetService(id);
@@ -51,8 +34,8 @@ namespace SafouaneAntoineService.Controllers
 
         public IActionResult ViewServices()
         {
-            User? user = GetUserLoggedIn();
-            if (user is null) { return NeedToBeLoggedIn(); }
+            User? user = ControllerHelper.GetUserLoggedIn(this);
+            if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
 
             ViewData["user"] = user.Username;
 
@@ -63,10 +46,10 @@ namespace SafouaneAntoineService.Controllers
         [HttpGet]
         public IActionResult Details(int id)
         {
-            User? currentUser = GetUserLoggedIn();
+            User? currentUser = ControllerHelper.GetUserLoggedIn(this);
             if (currentUser == null)
             {
-                return NeedToBeLoggedIn();
+                return ControllerHelper.NeedToBeLoggedIn(this);
             }
 
             ServiceOffer? serviceOffer = this._serviceOffer.GetService(id);
@@ -84,15 +67,15 @@ namespace SafouaneAntoineService.Controllers
        
         public IActionResult ManageOffers()
         {
-            User? user = GetUserLoggedIn();
-            if (user is null) { return NeedToBeLoggedIn(); }
+            User? user = ControllerHelper.GetUserLoggedIn(this);
+            if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
             return View(user.GetOffers(this._serviceOffer));
         }
 
         public IActionResult PublishOffer()
         {
             ViewBag.Categories = this._serviceCategory.GetCategories();
-            if (GetUserLoggedIn() is null) { return NeedToBeLoggedIn(); }
+            if (ControllerHelper.GetUserLoggedIn(this) is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
             return View();
         }
 
@@ -100,8 +83,8 @@ namespace SafouaneAntoineService.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult PublishOffer(ServiceOfferViewModel so)
         {
-            User? user = GetUserLoggedIn();
-            if (user is null) { return NeedToBeLoggedIn(); }
+            User? user = ControllerHelper.GetUserLoggedIn(this);
+            if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
 
             ServiceOffer offer = new ServiceOffer(so, user);
             if (ModelState.IsValid && offer.Publish(this._serviceOffer))

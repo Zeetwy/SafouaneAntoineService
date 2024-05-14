@@ -57,7 +57,7 @@ namespace SafouaneAntoineService.DAL
         {
             ////jointure pour récupérer les informations de l'utilisateur fournisseur et de la catégorie de service correspondante.
             const string query =
-@"SELECT [so].[id], [so].[type], [so].[description], [so].[category_id], [so].[user_id], [sc].[name], [u].[Firstname], [u].[Lastname]
+@"SELECT [so].[id], [so].[type], [so].[description], [so].[category_id], [so].[user_id], [sc].[name], [u].[Firstname], [u].[Lastname], [u].[Email]
     FROM [ServiceOffer] so
     JOIN [User] u ON [so].user_id = [u].[Id]
     JOIN [ServiceCategory] sc ON [so].[category_id] = [sc].[id]
@@ -84,7 +84,10 @@ namespace SafouaneAntoineService.DAL
                             new User(
                                 reader.GetInt32("user_id"),
                                 reader.GetString("Firstname"),
-                                reader.GetString("Lastname")
+                                reader.GetString("Lastname"),
+                                null,
+                                0,
+                                reader.GetString("Email")
                             )
                         );
                     }
@@ -171,8 +174,8 @@ namespace SafouaneAntoineService.DAL
         public bool RequestService(ServiceOffer offer,User customer)
         {
             const string query =
-@"INSERT INTO [ServiceRendered] ([Status], [Date], [NumberOfHours], [serviceOffer_id], [provider_id], [customer_id])
-    VALUES (0, NULL, NULL, @serviceOfferId, @providerId, @customerId)";
+@"INSERT INTO [ServiceRendered] ([Status], [Date], [NumberOfHours], [serviceOffer_id], [customer_id])
+    VALUES (0, NULL, NULL, @serviceOfferId, @customerId)";
 
             int rows_affected = 0;
 
@@ -181,13 +184,41 @@ namespace SafouaneAntoineService.DAL
                 SqlCommand cmd = new SqlCommand(query, connection);
 
                 cmd.Parameters.AddWithValue("serviceOfferId", offer.Id);
-                cmd.Parameters.AddWithValue("providerId", offer.Provider.Id);
                 cmd.Parameters.AddWithValue("customerId", customer.Id);
 
                 connection.Open();
                 rows_affected = cmd.ExecuteNonQuery();
             }
             return rows_affected > 0;
+        }
+
+        public bool ServiceWasRequested(ServiceOffer offer, User customer)
+        {
+            const string query =
+@"SELECT COUNT([id]) AS ""RequestedCount"" FROM [ServiceRendered]
+    WHERE [Status] = 0
+    AND [customer_id] = @customerId
+    AND [serviceOffer_id] = @serviceOfferId";
+
+            bool was_requested = false;
+
+            using (SqlConnection connection = new SqlConnection(this.connection_string))
+            {
+                SqlCommand cmd = new SqlCommand(query, connection);
+
+                cmd.Parameters.AddWithValue("serviceOfferId", offer.Id);
+                cmd.Parameters.AddWithValue("customerId", customer.Id);
+
+                connection.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        was_requested = reader.GetInt32("RequestedCount") > 0;
+                    }
+                }
+            }
+            return was_requested;
         }
     }
 }

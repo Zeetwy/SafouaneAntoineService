@@ -167,5 +167,27 @@ namespace SafouaneAntoineService.DAL
 
             return rows_affected > 0;
         }
+
+        public bool RequestService(ServiceOffer offer,User customer)
+        {
+            const string query =
+@"INSERT INTO [ServiceRendered] ([Status], [Date], [NumberOfHours], [serviceOffer_id], [provider_id], [customer_id])
+    VALUES (0, NULL, NULL, @serviceOfferId, @providerId, @customerId)";
+
+            int rows_affected = 0;
+
+            using (SqlConnection connection = new SqlConnection(this.connection_string))
+            {
+                SqlCommand cmd = new SqlCommand(query, connection);
+
+                cmd.Parameters.AddWithValue("serviceOfferId", offer.Id);
+                cmd.Parameters.AddWithValue("providerId", offer.Provider.Id);
+                cmd.Parameters.AddWithValue("customerId", customer.Id);
+
+                connection.Open();
+                rows_affected = cmd.ExecuteNonQuery();
+            }
+            return rows_affected > 0;
+        }
     }
 }

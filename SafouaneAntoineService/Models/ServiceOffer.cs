@@ -77,15 +77,19 @@ namespace SafouaneAntoineService.Models
             return serviceOfferDAL.GetService(id);
         }
 
-        public void MakeRequest(User customer, INotificationDAL notification_DAL)
+        public bool Request(User customer, IServiceOfferDAL service_offer_DAL, INotificationDAL notification_DAL)
         {
+            bool ret = false;
             if (customer.Id != this.Provider.Id)
             {
+                ret = service_offer_DAL.RequestService(this, customer); // Inserts request in database
+
                 // Créer le message à envoyer dans la notification
                 string message = $"Le client {customer.Firstname} {customer.Lastname} a fait une demande pour votre service.";
                 Notification notif = new Notification(Provider, message);
                 notif.Send(notification_DAL);
             }
+            return ret;
         }
     }
 }

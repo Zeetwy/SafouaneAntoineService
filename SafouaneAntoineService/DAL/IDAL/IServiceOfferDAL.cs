@@ -7,8 +7,8 @@ namespace SafouaneAntoineService.DAL.IDAL
     {
         public List<ServiceOffer> GetServices();
         ServiceOffer? GetService(int id);
-
         public List<ServiceOffer> GetOffersByUser(User user);
         public bool PublishOffer(ServiceOffer so);
+        public bool RequestService(ServiceOffer offer, User customer);
     }
 }

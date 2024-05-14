@@ -44,14 +44,8 @@ namespace SafouaneAntoineService.Controllers
             // Créer une instance de ServiceOffer (assurez-vous d'injecter IServiceOfferDAL dans votre contrôleur)
             ServiceOffer? serviceOffer = this._serviceOffer.GetService(id);
 
-            if (serviceOffer is not null)
-            {
-                // Appeler la méthode MakeRequest sur l'instance de ServiceOffer
-                serviceOffer.MakeRequest(customer, this._notification);
-            }
-
-            TempData["SuccessMessage"] = "Request sent successfully.";
-            return View("Request", serviceOffer);
+            // Appeler la méthode Request sur l'instance de ServiceOffer
+            return View("Request", serviceOffer is not null && serviceOffer.Request(customer, this._serviceOffer, this._notification));
         }
 
 

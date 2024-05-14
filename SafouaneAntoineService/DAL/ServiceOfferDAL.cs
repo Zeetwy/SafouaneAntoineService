@@ -82,8 +82,8 @@ namespace SafouaneAntoineService.DAL
                             new ServiceCategory(reader.GetString("name")),
                             new User(
                                 reader.GetInt32("user_id"),
-                                reader.GetString("Firstname"),
                                 reader.GetString("Lastname"),
+                                reader.GetString("Firstname"),
                                 null,
                                 0,
                                 reader.GetString("Email")

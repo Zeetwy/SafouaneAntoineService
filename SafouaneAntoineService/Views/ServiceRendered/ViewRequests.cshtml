@@ -1,0 +1,26 @@
+﻿@model List<ServiceRendered>?
+
+@if (Model is not null)
+{
+	<h1>Requests for offer n° @ViewBag.OfferId</h1>
+	<table class="table">
+		<tr>
+			<th>Lastname</th>
+			<th>Firstname</th>
+		</tr>
+	@foreach (ServiceRendered request in Model)
+	{
+		<tr>
+			<td>@request.Customer.Lastname</td>
+			<td>@request.Customer.Firstname</td>
+			<td><a class="btn btn-outline-secondary" asp-controller="ServiceRendered" asp-action="ConfirmRequest" asp-route-id="@request.Id">Confirm</a></td>
+		</tr>
+	}
+	</table>
+}
+else
+{
+	<div class="alert alert-danger">
+		An error occured while displaying service requests. Please try again later.
+	</div>
+}

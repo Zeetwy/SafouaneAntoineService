@@ -20,7 +20,8 @@
             <td>@offer.Type</td>
             <td>@offer.Description</td>
             <td>@offer.Category.Name</td>
-            <td><a class="btn-danger" asp-controller="ServiceOffer" asp-action="DeleteOffer" asp-route-id="@offer.Id">Delete</a></td>
+            <td><a class="btn btn-outline-secondary" asp-controller="ServiceRendered" asp-action="ViewRequests" asp-route-offer_id="@offer.Id">Requests</a></td>
+            <td><a class="btn btn-outline-danger" asp-controller="ServiceOffer" asp-action="DeleteOffer" asp-route-id="@offer.Id">Delete</a></td>
         </tr>
     }
     </table>

@@ -53,7 +53,7 @@ namespace SafouaneAntoineService.DAL
         }
 
         //Pour afficher un service en particulier
-        public ServiceOffer GetService(int id)
+        public ServiceOffer? GetService(int id)
         {
             ////jointure pour récupérer les informations de l'utilisateur fournisseur et de la catégorie de service correspondante.
             const string query =
@@ -87,10 +87,6 @@ namespace SafouaneAntoineService.DAL
                                 reader.GetString("Lastname")
                             )
                         );
-                    }
-                    else
-                    {
-                        throw new Exception("No corresponding entry in database.");
                     }
                 }
             }

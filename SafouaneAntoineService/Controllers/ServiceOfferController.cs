@@ -42,10 +42,13 @@ namespace SafouaneAntoineService.Controllers
             if (customer is null) { return NeedToBeLoggedIn(); }
 
             // Créer une instance de ServiceOffer (assurez-vous d'injecter IServiceOfferDAL dans votre contrôleur)
-            ServiceOffer serviceOffer = this._serviceOffer.GetService(id);
+            ServiceOffer? serviceOffer = this._serviceOffer.GetService(id);
 
-            // Appeler la méthode MakeRequest sur l'instance de ServiceOffer
-            serviceOffer.MakeRequest(customer, this._notification);
+            if (serviceOffer is not null)
+            {
+                // Appeler la méthode MakeRequest sur l'instance de ServiceOffer
+                serviceOffer.MakeRequest(customer, this._notification);
+            }
 
             TempData["SuccessMessage"] = "Request sent successfully.";
             return View("Request", serviceOffer);
@@ -63,10 +66,11 @@ namespace SafouaneAntoineService.Controllers
            
         }
 
+        [HttpGet]
         public IActionResult Details(int id)
         {
             // Appelle la méthode GetService pour obtenir les détails du service avec l'ID spécifié
-            ServiceOffer service = _serviceOffer.GetService(id);
+            ServiceOffer? service = _serviceOffer.GetService(id);
 
             if (GetUserLoggedIn() is null) { return NeedToBeLoggedIn(); }
 

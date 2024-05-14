@@ -6,7 +6,7 @@ namespace SafouaneAntoineService.DAL.IDAL
     public interface IServiceOfferDAL
     {
         public List<ServiceOffer> GetServices();
-        ServiceOffer GetService(int id);
+        ServiceOffer? GetService(int id);
 
         public List<ServiceOffer> GetOffersByUser(User user);
         public bool PublishOffer(ServiceOffer so);

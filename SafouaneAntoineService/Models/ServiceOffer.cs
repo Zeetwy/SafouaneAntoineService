@@ -72,7 +72,7 @@ namespace SafouaneAntoineService.Models
             return serviceoffers;
         }
 
-        public static ServiceOffer GetDetails(IServiceOfferDAL serviceOfferDAL, int id)
+        public static ServiceOffer? GetDetails(IServiceOfferDAL serviceOfferDAL, int id)
         {
             return serviceOfferDAL.GetService(id);
         }

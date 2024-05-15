@@ -36,10 +36,11 @@ namespace SafouaneAntoineService.Models
                     throw new Exception("The date cannot be in the future.");
                 }
 
-                return Date;
+                return date.Value; 
             }
             set { date = value; }
         }
+
 
 
 

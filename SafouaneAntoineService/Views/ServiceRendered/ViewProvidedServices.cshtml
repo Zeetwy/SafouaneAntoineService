@@ -5,7 +5,13 @@
     <div class="alert alert-success">@TempData["Message"]</div>
 }
 
-@if (Model is not null)
+@if (Model == null && Model.All(sr => sr.Servicestatus == ServiceRendered.Status.Requested))
+{
+    <div class="alert alert-danger">
+        There are no services rendered to you.
+    </div>
+}
+else 
 {
     <table class="table">
         <tr>
@@ -20,16 +26,8 @@
                 <td>@sr.Servicestatus</td>
                 <td>@sr.Date</td>
                 <td>@sr.NumberOfHours</td>
-                <td> <a asp-controller="ServiceRendered" asp-action="Details" asp-route-id="@sr.Id">Validate</a></td>
             </tr>
         }
-
-
     </table>
 }
-else
-{
-    <div class="alert alert-danger">
-        There is not services rendered to you.
-    </div>
-}
+

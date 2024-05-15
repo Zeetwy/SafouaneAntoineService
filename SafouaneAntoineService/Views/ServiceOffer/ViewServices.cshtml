@@ -6,7 +6,12 @@
 }
 
 <br />
-@("Welcome to the view services page : " + ViewData["User"])
+<div class="d-flex justify-content-between align-items-center">
+    @("Welcome to the view services page : " + ViewData["User"])
+    <div>
+        <a asp-controller="ServiceOffer" asp-action="ManageOffers" class="btn btn-primary mr-2">Manage your offers</a>
+    </div>
+</div>
 <br />
 
 <table class="table">

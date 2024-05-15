@@ -68,9 +68,11 @@ namespace SafouaneAntoineService.Controllers
             return Redirect("/ServiceOffer/ViewServices");
         }
 
-        public IActionResult Index()
+        public IActionResult Logout()
         {
-            return View();
+            HttpContext.Session.Clear();
+            TempData["State"] = "Disconnect";
+            return RedirectToAction("Authenticate");
         }
     }
 }

@@ -118,23 +118,21 @@ namespace SafouaneAntoineService.DAL
         public ServiceRendered? GetRequest(int id)
         {
             const string query =
-        @"SELECT [sr].[Date], [sr].[NumberOfHours],
-    [so].[id] serviceoffer_id, [so].[type] serviceoffer_type,
-    [sr].[customer_id], [uc].[Firstname] customer_firstname, [uc].[Lastname] customer_lastname,
-    [so].[user_id] provider_id, [up].[Firstname] provider_firstname, [up].[Lastname] provider_lastname
-    FROM [ServiceRendered] sr
-    JOIN [ServiceOffer] so ON [sr].[serviceOffer_id] = [so].[id]
-    JOIN [User] uc ON [sr].[customer_id] = [uc].[Id]
-    JOIN [User] up ON [so].[user_id] = [up].[Id]
-    WHERE [Status] = @status
-    AND  [sr].[id] = @rendered_id";
+        @"SELECT [sr].[Date], [sr].[NumberOfHours], [sr].[Status],
+	        [so].[id] serviceoffer_id, [so].[type] serviceoffer_type,
+	        [sr].[customer_id], [uc].[Firstname] customer_firstname, [uc].[Lastname] customer_lastname,
+	        [so].[user_id] provider_id, [up].[Firstname] provider_firstname, [up].[Lastname] provider_lastname
+            FROM [ServiceRendered] sr
+            JOIN [ServiceOffer] so ON [sr].[serviceOffer_id] = [so].[id]
+            JOIN [User] uc ON [sr].[customer_id] = [uc].[Id]
+	        JOIN [User] up ON [so].[user_id] = [up].[Id]
+            WHERE [sr].[id] = @rendered_id";
 
             ServiceRendered? servicerendered = null;
 
             using (SqlConnection connection = new SqlConnection(connection_string))
             {
                 SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("status", ServiceRendered.Status.Requested);
                 cmd.Parameters.AddWithValue("rendered_id", id);
 
                 connection.Open();
@@ -150,7 +148,7 @@ namespace SafouaneAntoineService.DAL
                         );
                         servicerendered = new ServiceRendered(
                             id,
-                            ServiceRendered.Status.Requested,
+                            (ServiceRendered.Status)reader.GetInt32("Status"),
                             new ServiceOffer(
                                 reader.GetInt32("serviceoffer_id"),
                                 reader.GetString("serviceoffer_type"),

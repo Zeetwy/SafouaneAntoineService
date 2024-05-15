@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SafouaneAntoineService.DAL;
 using SafouaneAntoineService.DAL.IDAL;
 using SafouaneAntoineService.Models;
+using SafouaneAntoineService.ViewModels;
 
 namespace SafouaneAntoineService.Controllers
 {
@@ -28,5 +30,41 @@ namespace SafouaneAntoineService.Controllers
             ViewBag.OfferId = offer_id;
             return View(this._serviceRendered.GetRequests(offer));
         }
+
+
+
+        public IActionResult ConfirmRequest(int id)
+        {
+          
+            if (ControllerHelper.GetUserLoggedIn(this) is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ConfirmRequest(ServiceRenderedViewModel sr)
+        {
+            User? user = ControllerHelper.GetUserLoggedIn(this);
+            if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
+
+            ServiceRendered? request = this._serviceRendered.GetRequest(sr.Id);
+           
+            if (ModelState.IsValid && request is not null)
+            {
+                if (request.Confirm(sr.NumberOfHours, sr.Date, this._serviceRendered))
+                {
+                    TempData["Message"] = "Service confirmed with success.";
+                    return RedirectToAction("ViewRequests", "ServiceRendered");
+                }
+                else
+                {
+                    TempData["Message"] = "Error with the confirmation of the service.";
+                }
+            }
+
+            return View(sr);
+        }
+
+
     }
 }

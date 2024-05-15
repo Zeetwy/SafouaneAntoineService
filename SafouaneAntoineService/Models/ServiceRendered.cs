@@ -1,4 +1,5 @@
 ﻿using SafouaneAntoineService.DAL.IDAL;
+using SafouaneAntoineService.ViewModels;
 
 namespace SafouaneAntoineService.Models
 {
@@ -60,6 +61,15 @@ namespace SafouaneAntoineService.Models
             this.numberofhours = numberofhours;
             this.date = date;
         }
+
+        public ServiceRendered(ServiceRenderedViewModel sr, User user)
+        {
+            this.id = sr.Id;
+            this.numberofhours = sr.NumberOfHours;
+            this.date = sr.Date;
+            this.provider = user;
+        }
+
 
         public bool Confirm(int hours, DateTime date, IServiceRenderedDAL service_rendered_DAL)
         {

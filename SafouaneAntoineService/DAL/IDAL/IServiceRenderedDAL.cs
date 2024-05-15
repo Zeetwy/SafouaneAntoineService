@@ -7,5 +7,6 @@ namespace SafouaneAntoineService.DAL.IDAL
         public bool ConfirmService(ServiceRendered service);
         public bool ValidateService(ServiceRendered service);
         public List<ServiceRendered>? GetRequests(ServiceOffer offer);
+        ServiceRendered? GetRequest(int id);
     }
 }

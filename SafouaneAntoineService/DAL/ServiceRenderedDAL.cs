@@ -3,6 +3,7 @@ using SafouaneAntoineService.Models;
 using SafouaneAntoineService.DAL.IDAL;
 using System.Data;
 using System;
+using static SafouaneAntoineService.Models.ServiceRendered;
 
 namespace SafouaneAntoineService.DAL
 {
@@ -117,21 +118,23 @@ namespace SafouaneAntoineService.DAL
         public ServiceRendered? GetRequest(int id)
         {
             const string query =
-        @"SELECT [sr].[Date], [sr].[NumberOfHours], [sr].[Status],
-	        [so].[id] serviceoffer_id, [so].[type] serviceoffer_type,
-	        [sr].[customer_id], [uc].[Firstname] customer_firstname, [uc].[Lastname] customer_lastname,
-	        [so].[user_id] provider_id, [up].[Firstname] provider_firstname, [up].[Lastname] provider_lastname
-            FROM [ServiceRendered] sr
-            JOIN [ServiceOffer] so ON [sr].[serviceOffer_id] = [so].[id]
-            JOIN [User] uc ON [sr].[customer_id] = [uc].[Id]
-	        JOIN [User] up ON [so].[user_id] = [up].[Id]
-            WHERE [sr].[id] = @rendered_id";
+        @"SELECT [sr].[Date], [sr].[NumberOfHours],
+    [so].[id] serviceoffer_id, [so].[type] serviceoffer_type,
+    [sr].[customer_id], [uc].[Firstname] customer_firstname, [uc].[Lastname] customer_lastname,
+    [so].[user_id] provider_id, [up].[Firstname] provider_firstname, [up].[Lastname] provider_lastname
+    FROM [ServiceRendered] sr
+    JOIN [ServiceOffer] so ON [sr].[serviceOffer_id] = [so].[id]
+    JOIN [User] uc ON [sr].[customer_id] = [uc].[Id]
+    JOIN [User] up ON [so].[user_id] = [up].[Id]
+    WHERE [Status] = @status
+    AND  [sr].[id] = @rendered_id";
 
             ServiceRendered? servicerendered = null;
 
             using (SqlConnection connection = new SqlConnection(connection_string))
             {
                 SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("status", ServiceRendered.Status.Requested);
                 cmd.Parameters.AddWithValue("rendered_id", id);
 
                 connection.Open();
@@ -147,7 +150,7 @@ namespace SafouaneAntoineService.DAL
                         );
                         servicerendered = new ServiceRendered(
                             id,
-                            (ServiceRendered.Status)reader.GetInt32("Status"),
+                            ServiceRendered.Status.Requested,
                             new ServiceOffer(
                                 reader.GetInt32("serviceoffer_id"),
                                 reader.GetString("serviceoffer_type"),
@@ -170,5 +173,43 @@ namespace SafouaneAntoineService.DAL
 
             return servicerendered;
         }
+
+
+        //Pour afficher les services rendus d'un user en particulier : 
+        public List<ServiceRendered> GetServicesRenderedByUser(User user)
+        {
+            const string query =
+            @"SELECT [sr].Id, [sr].[Status], [sr].[Date], [sr].[NumberOfHours]
+            FROM [ServiceRendered] sr
+            JOIN [User] u ON [sr].[customer_id] = [u].[Id]
+            WHERE [sr].[customer_id] = @customer_id";
+
+            List<ServiceRendered> servicesrendered = new List<ServiceRendered>();
+
+            using (SqlConnection connection = new SqlConnection(this.connection_string))
+            {
+                SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@customer_id", user.Id); // Corrected parameter name
+
+                connection.Open();
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int id = reader.GetInt32("Id");
+                        Status status = (Status)reader.GetInt32("Status");
+                        DateTime? date = reader.IsDBNull("Date") ? null : reader.GetDateTime("Date");
+                        int numberOfHours = reader.IsDBNull("NumberOfHours") ? 0 : reader.GetInt32("NumberOfHours");
+
+                        // Create ServiceRendered object and add to the list
+                        ServiceRendered serviceRendered = new ServiceRendered(id, status, null, null, user, numberOfHours, date);
+                        servicesrendered.Add(serviceRendered);
+                    }
+                }
+            }
+            return servicesrendered;
+        }
+
+
     }
 }

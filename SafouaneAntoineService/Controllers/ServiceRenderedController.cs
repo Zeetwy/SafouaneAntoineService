@@ -67,6 +67,15 @@ namespace SafouaneAntoineService.Controllers
             return View(sr);
         }
 
+        //Pour voir les services fourni à un utilisateur en particulier
+        public IActionResult ViewProvidedServices()
+        {
+            User? user = ControllerHelper.GetUserLoggedIn(this);
+            if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
+
+            return View(user.GetServicesRenderedByUserr(this._serviceRendered));
+        }
+
 
     }
 }

@@ -17,6 +17,7 @@ namespace SafouaneAntoineService.Models
         private string password;
 
         private List<ServiceOffer>? offers;
+        private List<ServiceRendered>? renders;
 
         private List<Notification>? notifications;
 
@@ -113,5 +114,18 @@ namespace SafouaneAntoineService.Models
             this.offers = service_offer_DAL.GetOffersByUser(this);
             return this.offers;
         }
+
+        public List<ServiceRendered> GetServicesRenderedByUserr(IServiceRenderedDAL service_rendered_DAL)
+        {
+            if (this.renders != null)
+            {
+                return this.renders;
+            }
+            this.renders = service_rendered_DAL.GetServicesRenderedByUser(this);
+
+            return this.renders;
+        }
+
+
     }
 }

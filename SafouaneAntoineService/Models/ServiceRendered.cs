@@ -23,12 +23,6 @@ namespace SafouaneAntoineService.Models
         public int Id { get => id; }
         public Status Servicestatus { get => servicestatus; }
 
-        /* public DateTime Date
-         {
-             get { return date ?? DateTime.MinValue; }
-             set { date = value; }
-         } */
-
         public DateTime Date
         {
             get
@@ -41,6 +35,7 @@ namespace SafouaneAntoineService.Models
                 {
                     throw new Exception("The date cannot be in the future.");
                 }
+
                 return Date;
             }
             set { date = value; }

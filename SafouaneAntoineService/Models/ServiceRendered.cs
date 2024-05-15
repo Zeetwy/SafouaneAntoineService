@@ -62,27 +62,20 @@ namespace SafouaneAntoineService.Models
             this.date = date;
         }
 
-        public ServiceRendered(ServiceRenderedViewModel sr, User user)
-        {
-            this.id = sr.Id;
-            this.numberofhours = sr.NumberOfHours;
-            this.date = sr.Date;
-            this.provider = user;
-        }
-
-
         public bool Confirm(int hours, DateTime date, IServiceRenderedDAL service_rendered_DAL)
         {
+            Status prev_status = this.servicestatus;
             if (servicestatus == Status.Requested)
             {
                 this.date = date;
                 this.numberofhours = hours;
+                this.servicestatus = Status.Completed;
                 if (service_rendered_DAL.ConfirmService(this))
                 {
-                    this.servicestatus = Status.Completed;
                     return true;
                 }
             }
+            this.servicestatus = prev_status;
             return false;
         }
 

@@ -48,13 +48,15 @@ namespace SafouaneAntoineService.Controllers
             if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
 
             ServiceRendered? request = this._serviceRendered.GetRequest(sr.Id);
-           
+
             if (ModelState.IsValid && request is not null)
             {
-                if (request.Confirm(sr.NumberOfHours, sr.Date, this._serviceRendered))
+                if (user.Id == request.Provider.Id && request.Confirm(sr.NumberOfHours, sr.Date, this._serviceRendered))
                 {
                     TempData["Message"] = "Service confirmed with success.";
-                    return RedirectToAction("ViewRequests", "ServiceRendered");
+                    return RedirectToAction("ManageOffers", "ServiceOffer");
+                    //return RedirectToAction("ViewRequests", "ServiceRendered", new { id = sr.ServiceOfferId });
+
                 }
                 else
                 {

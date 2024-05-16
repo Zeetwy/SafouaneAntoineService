@@ -6,6 +6,7 @@ namespace SafouaneAntoineService.Models
     {
         private int id;
         private string name;
+        private ServiceOffer offer;
 
         public int Id
         {
@@ -17,6 +18,12 @@ namespace SafouaneAntoineService.Models
         {
             get { return name; }
             set { name = value; }
+        }
+
+        public ServiceOffer Offer
+        {
+            get { return offer; }
+            set { offer = value; }
         }
         public ServiceCategory(string name)
         {

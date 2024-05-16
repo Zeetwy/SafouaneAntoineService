@@ -94,13 +94,14 @@ namespace SafouaneAntoineService.Models
             {
                 int amountToDebit = numberofhours;
 
-                // Débiter le fournisseur
-                this.provider.Debit(amountToDebit, userDAL);
+                // Débiter le client
+                this.customer.Debit(amountToDebit, userDAL);
 
-                // Créditer le client
-                this.customer.Credit(amountToDebit, userDAL);
+                // Créditer le fournisseur
+                 this.provider.Credit(amountToDebit, userDAL);
 
                 this.servicestatus = Status.Archived;
+
                 return true;
             }
             return false;

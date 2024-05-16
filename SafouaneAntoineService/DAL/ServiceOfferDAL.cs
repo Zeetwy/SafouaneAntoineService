@@ -64,34 +64,38 @@ namespace SafouaneAntoineService.DAL
 
             ServiceOffer? serviceOffer = null; //C'est cette variable qui sera renvoyée à la fin de la méthode avec les détails de l'offre de service récupérée.
 
-            using (SqlConnection connection = new SqlConnection(connection_string))
+            try
             {
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("id", id); //on ajoute un paramètre nommé id avec la valeur de l'ID du service qu'on souhaite récupérer
-
-                connection.Open();
-
-                using (SqlDataReader reader = cmd.ExecuteReader()) //on lit la requete
+                using (SqlConnection connection = new SqlConnection(connection_string))
                 {
-                    if (reader.Read())
+                    SqlCommand cmd = new SqlCommand(query, connection);
+                    cmd.Parameters.AddWithValue("id", id); //on ajoute un paramètre nommé id avec la valeur de l'ID du service qu'on souhaite récupérer
+
+                    connection.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader()) //on lit la requete
                     {
-                        serviceOffer = new ServiceOffer(
-                            reader.GetInt32("id"),
-                            reader.GetString("type"),
-                            reader.IsDBNull("description") ? null : reader.GetString("description"),
-                            new ServiceCategory(reader.GetString("name")),
-                            new User(
-                                reader.GetInt32("user_id"),
-                                reader.GetString("Lastname"),
-                                reader.GetString("Firstname"),
-                                null,
-                                0,
-                                reader.GetString("Email")
-                            )
-                        );
+                        if (reader.Read())
+                        {
+                            serviceOffer = new ServiceOffer(
+                                reader.GetInt32("id"),
+                                reader.GetString("type"),
+                                reader.IsDBNull("description") ? null : reader.GetString("description"),
+                                new ServiceCategory(reader.GetString("name")),
+                                new User(
+                                    reader.GetInt32("user_id"),
+                                    reader.GetString("Lastname"),
+                                    reader.GetString("Firstname"),
+                                    null,
+                                    0,
+                                    reader.GetString("Email")
+                                )
+                            );
+                        }
                     }
                 }
             }
+            catch (SqlException) { return null; }
 
             return serviceOffer;
         }
@@ -107,30 +111,33 @@ namespace SafouaneAntoineService.DAL
             WHERE [user_id]=@user_id";
 
             List<ServiceOffer> ret = new List<ServiceOffer>();
-
-            using (SqlConnection connection = new SqlConnection(this.connection_string))
+            try
             {
-                SqlCommand cmd = new SqlCommand(query, connection);
-
-                cmd.Parameters.AddWithValue("user_id", user.Id);
-
-                connection.Open();
-                using (var reader = cmd.ExecuteReader())
+                using (SqlConnection connection = new SqlConnection(this.connection_string))
                 {
-                    while (reader.Read())
+                    SqlCommand cmd = new SqlCommand(query, connection);
+
+                    cmd.Parameters.AddWithValue("user_id", user.Id);
+
+                    connection.Open();
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        ret.Add(
-                            new ServiceOffer(
-                                reader.GetInt32("id"),
-                                reader.GetString("type"),
-                                reader.IsDBNull("description") ? null : reader.GetString("description"),
-                                new ServiceCategory(reader.GetString("name")),
-                                user
-                            )
-                        );
+                        while (reader.Read())
+                        {
+                            ret.Add(
+                                new ServiceOffer(
+                                    reader.GetInt32("id"),
+                                    reader.GetString("type"),
+                                    reader.IsDBNull("description") ? null : reader.GetString("description"),
+                                    new ServiceCategory(reader.GetString("name")),
+                                    user
+                                )
+                            );
+                        }
                     }
                 }
             }
+            catch (SqlException) { }
             return ret;
         }
 
@@ -146,26 +153,29 @@ namespace SafouaneAntoineService.DAL
             )";
 
             int rows_affected = 0;
-
-            using (SqlConnection connection = new SqlConnection(this.connection_string))
+            try
             {
-                SqlCommand cmd = new SqlCommand(query, connection);
-
-                cmd.Parameters.AddWithValue("type", so.Type);
-                if (so.Description != null)
+                using (SqlConnection connection = new SqlConnection(this.connection_string))
                 {
-                    cmd.Parameters.AddWithValue("description", so.Description);
-                }
-                else
-                {
-                    cmd.Parameters.AddWithValue("description", DBNull.Value);
-                }
-                cmd.Parameters.AddWithValue("user_id", so.Provider.Id);
-                cmd.Parameters.AddWithValue("category_name", so.Category.Name);
+                    SqlCommand cmd = new SqlCommand(query, connection);
 
-                connection.Open();
-                rows_affected = cmd.ExecuteNonQuery();
+                    cmd.Parameters.AddWithValue("type", so.Type);
+                    if (so.Description != null)
+                    {
+                        cmd.Parameters.AddWithValue("description", so.Description);
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("description", DBNull.Value);
+                    }
+                    cmd.Parameters.AddWithValue("user_id", so.Provider.Id);
+                    cmd.Parameters.AddWithValue("category_name", so.Category.Name);
+
+                    connection.Open();
+                    rows_affected = cmd.ExecuteNonQuery();
+                }
             }
+            catch (SqlException) { return false; }
 
             return rows_affected > 0;
         }
@@ -177,17 +187,20 @@ namespace SafouaneAntoineService.DAL
             VALUES (@status, NULL, NULL, @serviceOfferId, @customerId)";
 
             int rows_affected = 0;
-
-            using (SqlConnection connection = new SqlConnection(this.connection_string))
+            try
             {
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("status", (int)ServiceRendered.Status.Requested);
-                cmd.Parameters.AddWithValue("serviceOfferId", offer.Id);
-                cmd.Parameters.AddWithValue("customerId", customer.Id);
+                using (SqlConnection connection = new SqlConnection(this.connection_string))
+                {
+                    SqlCommand cmd = new SqlCommand(query, connection);
+                    cmd.Parameters.AddWithValue("status", (int)ServiceRendered.Status.Requested);
+                    cmd.Parameters.AddWithValue("serviceOfferId", offer.Id);
+                    cmd.Parameters.AddWithValue("customerId", customer.Id);
 
-                connection.Open();
-                rows_affected = cmd.ExecuteNonQuery();
+                    connection.Open();
+                    rows_affected = cmd.ExecuteNonQuery();
+                }
             }
+            catch (SqlException) { return false; }
             return rows_affected > 0;
         }
 
@@ -200,24 +213,27 @@ namespace SafouaneAntoineService.DAL
             AND [serviceOffer_id] = @serviceOfferId";
 
             bool was_requested = false;
-
-            using (SqlConnection connection = new SqlConnection(this.connection_string))
+            try
             {
-                SqlCommand cmd = new SqlCommand(query, connection);
-
-                cmd.Parameters.AddWithValue("status", (int)ServiceRendered.Status.Requested);
-                cmd.Parameters.AddWithValue("serviceOfferId", offer.Id);
-                cmd.Parameters.AddWithValue("customerId", customer.Id);
-
-                connection.Open();
-                using (var reader = cmd.ExecuteReader())
+                using (SqlConnection connection = new SqlConnection(this.connection_string))
                 {
-                    if (reader.Read())
+                    SqlCommand cmd = new SqlCommand(query, connection);
+
+                    cmd.Parameters.AddWithValue("status", (int)ServiceRendered.Status.Requested);
+                    cmd.Parameters.AddWithValue("serviceOfferId", offer.Id);
+                    cmd.Parameters.AddWithValue("customerId", customer.Id);
+
+                    connection.Open();
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        was_requested = reader.GetInt32("RequestedCount") > 0;
+                        if (reader.Read())
+                        {
+                            was_requested = reader.GetInt32("RequestedCount") > 0;
+                        }
                     }
                 }
             }
+            catch (SqlException) { return false; }
             return was_requested;
         }
     }

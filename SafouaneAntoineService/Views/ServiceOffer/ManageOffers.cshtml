@@ -1,7 +1,8 @@
-﻿﻿@{
+﻿@model List<ServiceOffer>﻿
+@{
     ViewData["Title"] = "ManageOffers";
 }
-@if (!string.IsNullOrEmpty((string)TempData["Message"]))
+@if (!string.IsNullOrEmpty((string?)TempData["Message"]))
 {
     <div class="alert alert-success">@TempData["Message"]</div>
 }
@@ -17,7 +18,7 @@
         <th>Description</th>
         <th>Category</th>
     </tr>
-    @foreach (var offer in Model)
+    @foreach (ServiceOffer offer in Model)
     {
         <tr>
             <td>@offer.Type</td>

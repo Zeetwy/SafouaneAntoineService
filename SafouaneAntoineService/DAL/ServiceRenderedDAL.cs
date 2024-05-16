@@ -2,7 +2,6 @@
 using SafouaneAntoineService.Models;
 using SafouaneAntoineService.DAL.IDAL;
 using System.Data;
-using System;
 using static SafouaneAntoineService.Models.ServiceRendered;
 
 namespace SafouaneAntoineService.DAL
@@ -148,7 +147,7 @@ namespace SafouaneAntoineService.DAL
                         );
                         servicerendered = new ServiceRendered(
                             id,
-                            (ServiceRendered.Status)reader.GetInt32("Status"),
+                            (Status)reader.GetInt32("Status"),
                             new ServiceOffer(
                                 reader.GetInt32("serviceoffer_id"),
                                 reader.GetString("serviceoffer_type"),

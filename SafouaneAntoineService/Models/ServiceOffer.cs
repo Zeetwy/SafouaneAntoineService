@@ -11,6 +11,7 @@ namespace SafouaneAntoineService.Models
         private string? description;
         private User? provider;
         private ServiceCategory? category;
+        private List<Review> reviews;
 
         public int Id
         {
@@ -90,6 +91,15 @@ namespace SafouaneAntoineService.Models
                 notif.Send(notification_DAL);
             }
             return ret;
+        }
+
+        public void AddReview(Review review)
+        {
+            if (reviews == null)
+            {
+                reviews = new List<Review>();
+            }
+            this.reviews.Add(review);
         }
     }
 }

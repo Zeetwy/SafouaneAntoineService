@@ -9,5 +9,6 @@ namespace SafouaneAntoineService.DAL.IDAL
         public List<ServiceRendered>? GetRequests(ServiceOffer offer);
         ServiceRendered? GetRequest(int id);
         public List<ServiceRendered> GetServicesRenderedByUser(User user);
+        public ServiceRendered? GetServiceRendered(int id);
     }
 }

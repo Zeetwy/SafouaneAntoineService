@@ -88,14 +88,32 @@ namespace SafouaneAntoineService.Models
             return false;
         }
 
-        public bool Validate(IServiceRenderedDAL service_rendered_DAL)
+        public bool Validate(IServiceRenderedDAL service_rendered_DAL, IUserDAL userDAL)
         {
             if (servicestatus == Status.Completed && service_rendered_DAL.ValidateService(this))
             {
+                int amountToDebit = numberofhours;
+
+                // Débiter le fournisseur
+                this.provider.Debit(amountToDebit, userDAL);
+
+                // Créditer le client
+                this.customer.Credit(amountToDebit, userDAL);
+
                 this.servicestatus = Status.Archived;
                 return true;
             }
             return false;
         }
+
+        public static ServiceRendered? GetServiceById(IServiceRenderedDAL serviceRenderedDAL, int id)
+        {
+            return serviceRenderedDAL.GetServiceRendered(id);
+        }
+
+
+
+
+
     }
 }

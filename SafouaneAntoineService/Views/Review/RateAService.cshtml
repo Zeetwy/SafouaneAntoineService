@@ -1,0 +1,21 @@
+﻿@model Review
+
+<h1 style="text-align:center">Give a review</h1>
+<br />
+<a class="btn" style="border: 2px solid grey" asp-controller="ServiceRendered" asp-action="ViewProvidedServices">Return</a>
+<br />
+<div>
+    <form method="post" asp-controller="Review" asp-action="RateAService">
+        <label>Rating :</label>
+        <input name="Rating" type="number" min="1" max="5" value="1" />
+        <span style="color:red"></span>
+        <br />
+
+        <label>Comment :</label>
+        <input name="Comment" type="text" />
+        <span style="color:red"></span>
+        <br />
+
+        <input type="submit" value="Confirm" />
+    </form>
+</div>

@@ -123,5 +123,39 @@ namespace SafouaneAntoineService.DAL
         }
 
 
+
+        public bool Debit(User u, int amount)
+        {
+            string query = "UPDATE [User] SET Timecredits = Timecredits - @Amount WHERE Id = @UserId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Amount", amount);
+                command.Parameters.AddWithValue("@UserId", u.Id);
+
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+        }
+
+        public bool Credit(User u, int amount)
+        {
+            string query = "UPDATE [User] SET Timecredits = Timecredits + @Amount WHERE Id = @UserId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Amount", amount);
+                command.Parameters.AddWithValue("@UserId", u.Id);
+
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
+        }
+
+
     }
 }

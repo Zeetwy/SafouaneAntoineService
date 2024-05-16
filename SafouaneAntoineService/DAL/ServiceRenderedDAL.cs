@@ -209,5 +209,85 @@ namespace SafouaneAntoineService.DAL
         }
 
 
+
+        //Pour afficher les détails d'un service rendu
+        public ServiceRendered? GetServiceRendered(int id)
+        {
+            const string query =
+                @"SELECT  sr.[id], sr.[Date], sr.[NumberOfHours], sr.[Status], sr.[provider_id], sr.[customer_id],
+            u_provider.[Firstname] AS ProviderFirstname, u_provider.[Lastname] AS ProviderLastname, 
+            u_customer.[Firstname] AS CustomerFirstname, u_customer.[Lastname] AS CustomerLastname,  so.[id] AS serviceOffer_id,
+            so.[type], so.[description], sc.[name] AS category
+            FROM [ServiceRendered] sr
+            JOIN [User] u_customer ON sr.[customer_id] = u_customer.[Id]
+            JOIN [User] u_provider ON sr.[provider_id] = u_provider.[Id]
+            JOIN [ServiceOffer] so ON sr.[serviceOffer_id] = so.[id]
+            JOIN [ServiceCategory] sc ON so.[category_id] = sc.[id]
+            WHERE sr.[id] = @id";
+
+            ServiceRendered? serviceRendered = null;
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connection_string))
+                {
+                    SqlCommand cmd = new SqlCommand(query, connection);
+                    cmd.Parameters.AddWithValue("id", id);
+
+                    connection.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            User provider = new User(
+                                reader.GetInt32(reader.GetOrdinal("provider_id")),
+                                reader.GetString(reader.GetOrdinal("ProviderFirstname")),
+                                reader.GetString(reader.GetOrdinal("ProviderLastname"))
+                            );
+
+                            User customer = new User(
+                                reader.GetInt32(reader.GetOrdinal("customer_id")),
+                                reader.GetString(reader.GetOrdinal("CustomerFirstname")),
+                                reader.GetString(reader.GetOrdinal("CustomerLastname"))
+                            );
+
+                            ServiceOffer serviceOffer = new ServiceOffer(
+                                reader.GetInt32(reader.GetOrdinal("serviceOffer_id")),
+                                reader.GetString(reader.GetOrdinal("type")),
+                                reader.IsDBNull(reader.GetOrdinal("description")) ? null : reader.GetString(reader.GetOrdinal("description")),
+                                new ServiceCategory(reader.GetString(reader.GetOrdinal("category")))
+                            );
+
+                            serviceRendered = new ServiceRendered(
+                                reader.GetInt32(reader.GetOrdinal("id")),
+                                (Status)reader.GetInt32(reader.GetOrdinal("Status")),
+                                serviceOffer,
+                                provider,
+                                customer,
+                                reader.IsDBNull(reader.GetOrdinal("NumberOfHours")) ? 0 : reader.GetInt32(reader.GetOrdinal("NumberOfHours")), // NumberOfHours
+                                reader.IsDBNull(reader.GetOrdinal("Date")) ? null : reader.GetDateTime(reader.GetOrdinal("Date"))
+                            );
+
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Gérer l'exception
+                Console.WriteLine($"Erreur lors de la récupération du service rendu : {ex.Message}");
+            }
+
+            return serviceRendered;
+        }
+
+
+
+
+
+
+
+
     }
 }

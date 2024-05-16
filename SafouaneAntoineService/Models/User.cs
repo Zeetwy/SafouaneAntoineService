@@ -126,6 +126,24 @@ namespace SafouaneAntoineService.Models
             return this.renders;
         }
 
+        public bool Debit(int amount, IUserDAL userDAL)
+        {
+            if (timecredits < amount)
+            {
+                return false; // Insufficient credits
+            }
+
+            timecredits -= amount;
+            return userDAL.Debit(this, amount); 
+        }
+
+        public bool Credit(int amount, IUserDAL userDAL)
+        {
+            timecredits += amount;
+            return userDAL.Credit(this, amount); 
+        }
+
+
 
     }
 }

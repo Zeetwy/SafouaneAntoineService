@@ -10,10 +10,12 @@ namespace SafouaneAntoineService.Controllers
     {
         private readonly IServiceRenderedDAL _serviceRendered;
         private readonly IServiceOfferDAL _serviceOffer;
-        public ServiceRenderedController(IServiceRenderedDAL _serviceRendered, IServiceOfferDAL _serviceOffer)
+        private readonly IUserDAL _user;
+        public ServiceRenderedController(IServiceRenderedDAL _serviceRendered, IServiceOfferDAL _serviceOffer, IUserDAL user)
         {
             this._serviceRendered = _serviceRendered;
             this._serviceOffer = _serviceOffer;
+           this._user = user;  
         }
 
         [HttpGet]
@@ -75,6 +77,62 @@ namespace SafouaneAntoineService.Controllers
 
             return View(user.GetServicesRenderedByUserr(this._serviceRendered));
         }
+
+        public IActionResult ValidateService(int id)
+        {
+            User? user = ControllerHelper.GetUserLoggedIn(this);
+            if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
+
+            ServiceRendered? service = this._serviceRendered.GetRequest(id);
+
+            if (service is not null)
+            {
+                if (user.Id == service.Customer.Id && service.Validate(this._serviceRendered, this._user))
+                {
+
+                    TempData["Message"] = "Service validated successfully.";
+                    return RedirectToAction("ValidateService"); // Redirige vers la vue ViewProvidedServices
+                }
+                else
+                {
+                    TempData["Message"] = "You are not authorized to validate this service or an error occurred while validating the service.";
+                }
+            }
+            else
+            {
+                TempData["Message"] = "Service rendered not found.";
+            }
+
+            return RedirectToAction("ViewProvidedServices", "ServiceRendered"); // Redirige vers la page d'accueil ou une autre page appropriée
+
+
+        }
+
+      /*  [HttpGet]
+        public IActionResult ViewDetailsServiceRendered(int id)
+        {
+            User? currentUser = ControllerHelper.GetUserLoggedIn(this);
+            if (currentUser == null)
+            {
+                return ControllerHelper.NeedToBeLoggedIn(this);
+            }
+
+            ServiceRendered? serviceRendered = this._serviceRendered.GetServiceRendered(id);
+
+            // return View(new { ServiceOffer = serviceOffer, CurrentUser = currentUser });
+            ServiceRenderedDetailsViewModel srvm = new ServiceRenderedDetailsViewModel
+            {
+                ServiceRendered = serviceRendered,
+                CurrentUser = currentUser
+            };
+
+            return View(srvm);
+        }
+       */
+
+
+
+
 
 
     }

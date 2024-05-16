@@ -87,18 +87,8 @@ namespace SafouaneAntoineService.Controllers
 
             if (service is not null)
             {
-                if (user.Id == service.Customer.Id && service.Validate(this._serviceRendered, this._user))
-                {
-
-                    TempData["Message"] = "Service validated successfully.";
-                    return RedirectToAction("ValidateService");
-                    //return RedirectToAction("ValidateService", new { id = service.Id });
-                   // return RedirectToAction("ValidateService", new { success = true, service_id = service.Id });
-                }
-                else
-                {
-                    TempData["Message"] = "Error with the validation of the service.";
-                }
+                bool success = user.Id == service.Customer.Id && service.Validate(this._serviceRendered, this._user);
+                return View((success, service.Id));
             }
             else
             {
@@ -106,31 +96,29 @@ namespace SafouaneAntoineService.Controllers
             }
 
             return RedirectToAction("ViewProvidedServices", "ServiceRendered");
-
-
         }
 
-      /*  [HttpGet]
-        public IActionResult ViewDetailsServiceRendered(int id)
-        {
-            User? currentUser = ControllerHelper.GetUserLoggedIn(this);
-            if (currentUser == null)
-            {
-                return ControllerHelper.NeedToBeLoggedIn(this);
-            }
+        /*  [HttpGet]
+          public IActionResult ViewDetailsServiceRendered(int id)
+          {
+              User? currentUser = ControllerHelper.GetUserLoggedIn(this);
+              if (currentUser == null)
+              {
+                  return ControllerHelper.NeedToBeLoggedIn(this);
+              }
 
-            ServiceRendered? serviceRendered = this._serviceRendered.GetServiceRendered(id);
+              ServiceRendered? serviceRendered = this._serviceRendered.GetServiceRendered(id);
 
-            // return View(new { ServiceOffer = serviceOffer, CurrentUser = currentUser });
-            ServiceRenderedDetailsViewModel srvm = new ServiceRenderedDetailsViewModel
-            {
-                ServiceRendered = serviceRendered,
-                CurrentUser = currentUser
-            };
+              // return View(new { ServiceOffer = serviceOffer, CurrentUser = currentUser });
+              ServiceRenderedDetailsViewModel srvm = new ServiceRenderedDetailsViewModel
+              {
+                  ServiceRendered = serviceRendered,
+                  CurrentUser = currentUser
+              };
 
-            return View(srvm);
-        }
-       */
+              return View(srvm);
+          }
+         */
 
 
 

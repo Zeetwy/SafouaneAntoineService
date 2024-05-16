@@ -1,5 +1,6 @@
 ﻿using SafouaneAntoineService.DAL.IDAL;
 using SafouaneAntoineService.Models;
+using System.Data;
 using System.Data.SqlClient;
 
 namespace SafouaneAntoineService.DAL
@@ -28,5 +29,35 @@ namespace SafouaneAntoineService.DAL
             }
         }
 
+        public List<Notification> GetNotifications(User user)
+        {
+            const string query = "SELECT [id], [content] FROM [Notification] WHERE [user_id] = @user_id";
+
+            List<Notification> notifications = new List<Notification>();
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand(query, connection);
+
+                cmd.Parameters.AddWithValue("user_id", user.Id);
+
+                connection.Open();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        notifications.Add(
+                            new Notification(
+                                reader.GetInt32("id"),
+                                user,
+                                reader.GetString("content")
+                            )
+                        );
+                    }
+                }
+            }
+            return notifications;
+        }
     }
 }

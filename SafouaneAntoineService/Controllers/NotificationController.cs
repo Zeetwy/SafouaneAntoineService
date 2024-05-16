@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using SafouaneAntoineService.DAL;
 using SafouaneAntoineService.DAL.IDAL;
 using SafouaneAntoineService.Models;
 
@@ -17,9 +15,11 @@ namespace SafouaneAntoineService.Controllers
             this._user = _user;
         }
 
-        public IActionResult Index()
+        public IActionResult ViewNotifications()
         {
-            return View();
+            User? user = ControllerHelper.GetUserLoggedIn(this);
+            if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
+            return View(user.GetNotifications(this._notification));
         }
     }
 }

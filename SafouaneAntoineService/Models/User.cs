@@ -107,25 +107,29 @@ namespace SafouaneAntoineService.Models
 
         public List<ServiceOffer> GetOffers(IServiceOfferDAL service_offer_DAL)
         {
-            if (this.offers != null)
+            if (this.offers == null)
             {
-                return this.offers;
+                this.offers = service_offer_DAL.GetOffersByUser(this);
             }
-            this.offers = service_offer_DAL.GetOffersByUser(this);
             return this.offers;
         }
 
         public List<ServiceRendered> GetServicesRenderedByUserr(IServiceRenderedDAL service_rendered_DAL)
         {
-            if (this.renders != null)
+            if (this.renders == null)
             {
-                return this.renders;
+                this.renders = service_rendered_DAL.GetServicesRenderedByUser(this);
             }
-            this.renders = service_rendered_DAL.GetServicesRenderedByUser(this);
-
             return this.renders;
         }
 
-
+        public List<Notification> GetNotifications(INotificationDAL notificationDAL)
+        {
+            if (this.notifications == null)
+            {
+                this.notifications = notificationDAL.GetNotifications(this);
+            }
+            return this.notifications;
+        }
     }
 }

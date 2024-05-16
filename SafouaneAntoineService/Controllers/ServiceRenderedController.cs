@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SafouaneAntoineService.DAL;
 using SafouaneAntoineService.DAL.IDAL;
 using SafouaneAntoineService.Models;
 using SafouaneAntoineService.ViewModels;
@@ -75,7 +74,5 @@ namespace SafouaneAntoineService.Controllers
 
             return View(user.GetServicesRenderedByUserr(this._serviceRendered));
         }
-
-
     }
 }

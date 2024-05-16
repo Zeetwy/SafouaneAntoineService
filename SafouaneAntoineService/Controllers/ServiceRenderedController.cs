@@ -91,11 +91,13 @@ namespace SafouaneAntoineService.Controllers
                 {
 
                     TempData["Message"] = "Service validated successfully.";
-                    return RedirectToAction("ValidateService"); // Redirige vers la vue ViewProvidedServices
+                    return RedirectToAction("ValidateService");
+                    //return RedirectToAction("ValidateService", new { id = service.Id });
+                   // return RedirectToAction("ValidateService", new { success = true, service_id = service.Id });
                 }
                 else
                 {
-                    TempData["Message"] = "You are not authorized to validate this service or an error occurred while validating the service.";
+                    TempData["Message"] = "Error with the validation of the service.";
                 }
             }
             else
@@ -103,7 +105,7 @@ namespace SafouaneAntoineService.Controllers
                 TempData["Message"] = "Service rendered not found.";
             }
 
-            return RedirectToAction("ViewProvidedServices", "ServiceRendered"); // Redirige vers la page d'accueil ou une autre page appropriée
+            return RedirectToAction("ViewProvidedServices", "ServiceRendered");
 
 
         }

@@ -128,11 +128,6 @@ namespace SafouaneAntoineService.Models
 
         public bool Debit(int amount, IUserDAL userDAL)
         {
-            if (timecredits < amount)
-            {
-                return false; // Insufficient credits
-            }
-
             timecredits -= amount;
             return userDAL.Debit(this, amount); 
         }

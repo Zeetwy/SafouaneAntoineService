@@ -1,15 +1,16 @@
 ﻿@model (bool success, int service_id)
-@if (Model.success)
+
+@if (Model)
 {
     <div class="alert alert-success">
         Service validated successfully.
     </div>
 
-    <a asp-controller="Review" asp-action="RateService" asp-route-id="@Model.service_id">Rate service</a>
+    <a asp-controller="Review" asp-action="RateAService" asp-route-id="@Model.service_id">Rate service</a>
 }
 else
 {
     <div class="alert alert-danger">
-        An error occured while validating the service. Please try again later.
+        An error occurred while validating the service. Please try again later.
     </div>
 }

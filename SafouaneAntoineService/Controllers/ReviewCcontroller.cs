@@ -61,7 +61,7 @@ namespace SafouaneAntoineService.Controllers
                 else
                     TempData["Message"] = "Error occurred during the creation of the review.";
 
-                return RedirectToAction("SeeAllOffers", "Carpool");
+                return RedirectToAction("ViewServices", "ServiceOffer");
             }
             return View();
         }

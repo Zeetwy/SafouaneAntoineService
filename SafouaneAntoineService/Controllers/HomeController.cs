@@ -23,17 +23,6 @@ namespace SafouaneAntoineService.Controllers
             return View();
         }
 
-        public IActionResult Home()
-        {
-            string? user = HttpContext.Session.GetString("User");
-            if (string.IsNullOrEmpty(user))
-            {
-                TempData["Message"] = "You need to be logged in to view this page.";
-                return RedirectToAction("Authenticate", "User");
-            }
-            return View("Views/Home/Home.cshtml");
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

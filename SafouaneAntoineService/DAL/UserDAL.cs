@@ -61,8 +61,7 @@ namespace SafouaneAntoineService.DAL
             bool success = false;
 
             // Définition de la requête SQL pour rechercher un utilisateur existant
-            const string query =
-@"INSERT INTO [User](LastName, Firstname, Username, Password, Email, Timecredits)
+            const string query = @"INSERT INTO [User](LastName, Firstname, Username, Password, Email, Timecredits)
     VALUES (@LastName, @Firstname, @Username, @Password, @Email, @Timecredits)";
 
             // Requête SQL pour vérifier si un utilisateur existe déjà avec le même nom d'utilisateur ou la même adresse e-mail
@@ -122,11 +121,9 @@ namespace SafouaneAntoineService.DAL
             return success;
         }
 
-
-
         public bool Debit(User u, int amount)
         {
-            string query = "UPDATE [User] SET Timecredits = Timecredits - @Amount WHERE Id = @UserId";
+            const string query = "UPDATE [User] SET Timecredits = Timecredits - @Amount WHERE Id = @UserId";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -142,7 +139,7 @@ namespace SafouaneAntoineService.DAL
 
         public bool Credit(User u, int amount)
         {
-            string query = "UPDATE [User] SET Timecredits = Timecredits + @Amount WHERE Id = @UserId";
+            const string query = "UPDATE [User] SET Timecredits = Timecredits + @Amount WHERE Id = @UserId";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -156,6 +153,25 @@ namespace SafouaneAntoineService.DAL
             }
         }
 
+        /*public User RefreshInfo(User user)
+        {
+            const string query = "SELECT [Timecredits], [Email] FROM [User] WHERE [Id] = @id";
 
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("id", user.Id);
+                connection.Open();
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        user.Timecredits = reader.GetInt32("Timecredits");
+                        user.Email = reader.GetString("Email");
+                    }
+                }
+            }
+            return user;
+        }*/
     }
 }

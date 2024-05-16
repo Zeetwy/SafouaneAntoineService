@@ -11,12 +11,4 @@
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
 
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Home\Home.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Home\Home.cshtml" />
-  </ItemGroup>
-
 </Project>

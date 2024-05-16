@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using SafouaneAntoineService.DAL;
 using SafouaneAntoineService.DAL.IDAL;
 using SafouaneAntoineService.Models;
 
@@ -19,14 +18,7 @@ namespace SafouaneAntoineService.Controllers
 
         public IActionResult RateAService(int id)
         {
-            string userSession = HttpContext.Session.GetString("User");
-            if (string.IsNullOrEmpty(userSession))
-            {
-                TempData["Message"] = "Please authenticate first.";
-                return RedirectToAction("Authenticate", "User");
-            }
-
-            User currentUser = JsonConvert.DeserializeObject<User>(userSession);
+            User? currentUser = ControllerHelper.GetUserLoggedIn(this);
 
             //Mauvais, il faut récuperer l'offre qui est attachée au service !
             ServiceOffer? serviceOffer = ServiceOffer.GetDetails(_offer, id);
@@ -48,11 +40,11 @@ namespace SafouaneAntoineService.Controllers
         {
             if (ModelState.IsValid)
             {
-                string userSession = HttpContext.Session.GetString("User");
-                User currentUser = JsonConvert.DeserializeObject<User>(userSession);
+                User? currentUser = ControllerHelper.GetUserLoggedIn(this);
+                if (currentUser is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
 
-                string serviceOfferSession = HttpContext.Session.GetString("ServiceOffer");
-                ServiceOffer serviceOffer = JsonConvert.DeserializeObject<ServiceOffer>(serviceOfferSession);
+                string? serviceOfferSession = HttpContext.Session.GetString("ServiceOffer");
+                ServiceOffer? serviceOffer = JsonConvert.DeserializeObject<ServiceOffer>(serviceOfferSession);
 
                 Review review = new Review(rating, comment, currentUser, serviceOffer);
 

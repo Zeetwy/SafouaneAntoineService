@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SafouaneAntoineService.DAL.IDAL;
 using SafouaneAntoineService.Models;
 using SafouaneAntoineService.ViewModels;
@@ -10,12 +11,14 @@ namespace SafouaneAntoineService.Controllers
         private readonly IServiceOfferDAL _serviceOffer;
         private readonly IServiceCategoryDAL _serviceCategory;
         private readonly INotificationDAL _notification;
+        private readonly IUserDAL _user;
 
-        public ServiceOfferController(IServiceOfferDAL _serviceOffer, IServiceCategoryDAL _serviceCategory, INotificationDAL _notification)
+        public ServiceOfferController(IServiceOfferDAL _serviceOffer, IServiceCategoryDAL _serviceCategory, INotificationDAL _notification, IUserDAL user)
         {
             this._serviceOffer = _serviceOffer;
             this._serviceCategory = _serviceCategory;
             this._notification = _notification;
+            this._user = user;
         }
 
         [HttpGet]
@@ -28,7 +31,7 @@ namespace SafouaneAntoineService.Controllers
             ServiceOffer? serviceOffer = ServiceOffer.GetOffer(id, _serviceOffer);
 
             // Appeler la méthode Request sur l'instance de ServiceOffer
-            return View("Request", serviceOffer is not null && serviceOffer.Request(customer, this._serviceOffer, this._notification));
+            return View("Request", serviceOffer is not null && customer.Timecredits > 0 && serviceOffer.Request(customer, this._serviceOffer, this._notification));
         }
 
 
@@ -47,14 +50,13 @@ namespace SafouaneAntoineService.Controllers
         public IActionResult Details(int id)
         {
             User? currentUser = ControllerHelper.GetUserLoggedIn(this);
-            if (currentUser == null)
+            if (currentUser is null)
             {
                 return ControllerHelper.NeedToBeLoggedIn(this);
             }
 
             ServiceOffer? serviceOffer = ServiceOffer.GetOffer(id, _serviceOffer);
 
-            // return View(new { ServiceOffer = serviceOffer, CurrentUser = currentUser });
             ServiceDetailsViewModel svm = new ServiceDetailsViewModel
             {
                 ServiceOffer = serviceOffer,

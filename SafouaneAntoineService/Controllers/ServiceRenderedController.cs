@@ -10,11 +10,11 @@ namespace SafouaneAntoineService.Controllers
         private readonly IServiceRenderedDAL _serviceRendered;
         private readonly IServiceOfferDAL _serviceOffer;
         private readonly IUserDAL _user;
-        public ServiceRenderedController(IServiceRenderedDAL _serviceRendered, IServiceOfferDAL _serviceOffer, IUserDAL user)
+        public ServiceRenderedController(IServiceRenderedDAL _serviceRendered, IServiceOfferDAL _serviceOffer, IUserDAL _user)
         {
             this._serviceRendered = _serviceRendered;
             this._serviceOffer = _serviceOffer;
-           this._user = user;  
+            this._user = _user;  
         }
 
         [HttpGet]
@@ -23,20 +23,17 @@ namespace SafouaneAntoineService.Controllers
             User? user = ControllerHelper.GetUserLoggedIn(this);
             if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
 
-            ServiceOffer? offer = this._serviceOffer.GetService(offer_id);
+            ServiceOffer? offer = ServiceOffer.GetOffer(offer_id, this._serviceOffer);
             if (offer is null || offer.Provider.Id != user.Id)
             {
                 return View(null);
             }
             ViewBag.OfferId = offer_id;
-            return View(this._serviceRendered.GetRequests(offer));
+            return View(offer.GetRequests(this._serviceRendered));
         }
-
-
 
         public IActionResult ConfirmRequest(int id)
         {
-          
             if (ControllerHelper.GetUserLoggedIn(this) is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
             return View();
         }
@@ -48,7 +45,7 @@ namespace SafouaneAntoineService.Controllers
             User? user = ControllerHelper.GetUserLoggedIn(this);
             if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
 
-            ServiceRendered? request = this._serviceRendered.GetRequest(sr.Id);
+            ServiceRendered? request = ServiceRendered.GetServiceById(sr.Id, this._serviceRendered);
 
             if (ModelState.IsValid && request is not null)
             {
@@ -56,8 +53,6 @@ namespace SafouaneAntoineService.Controllers
                 {
                     TempData["Message"] = "Service confirmed with success.";
                     return RedirectToAction("ManageOffers", "ServiceOffer");
-                    //return RedirectToAction("ViewRequests", "ServiceRendered", new { id = sr.ServiceOfferId });
-
                 }
                 else
                 {
@@ -82,7 +77,7 @@ namespace SafouaneAntoineService.Controllers
             User? user = ControllerHelper.GetUserLoggedIn(this);
             if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
 
-            ServiceRendered? service = this._serviceRendered.GetRequest(id);
+            ServiceRendered? service = ServiceRendered.GetServiceById(id, this._serviceRendered);
 
             if (service is not null)
             {

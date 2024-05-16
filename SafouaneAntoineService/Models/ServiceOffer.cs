@@ -11,7 +11,7 @@ namespace SafouaneAntoineService.Models
         private string? description;
         private User? provider;
         private ServiceCategory? category;
-        private List<Review> reviews;
+        private List<Review>? reviews;
 
         public int Id
         {
@@ -98,9 +98,14 @@ namespace SafouaneAntoineService.Models
             return serviceOfferDAL.GetService(id);
         }
 
+        public List<ServiceRendered>? GetRequests(IServiceRenderedDAL serviceRenderedDAL)
+        {
+            return serviceRenderedDAL.GetRequests(this);
+        }
+
         public void AddReview(Review review)
         {
-            if (reviews == null)
+            if (reviews is null)
             {
                 reviews = new List<Review>();
             }

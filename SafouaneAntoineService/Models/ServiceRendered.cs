@@ -27,7 +27,7 @@ namespace SafouaneAntoineService.Models
         {
             get
             {
-                if (date == null || servicestatus == Status.Requested)
+                if (date is null || servicestatus == Status.Requested)
                 {
                     throw new Exception("No date was set.");
                 }
@@ -40,9 +40,6 @@ namespace SafouaneAntoineService.Models
             }
             set { date = value; }
         }
-
-
-
 
         public int NumberOfHours
         {
@@ -98,7 +95,7 @@ namespace SafouaneAntoineService.Models
                 this.customer.Debit(amountToDebit, userDAL);
 
                 // Créditer le fournisseur
-                 this.provider.Credit(amountToDebit, userDAL);
+                this.provider.Credit(amountToDebit, userDAL);
 
                 this.servicestatus = Status.Archived;
 
@@ -107,14 +104,9 @@ namespace SafouaneAntoineService.Models
             return false;
         }
 
-        public static ServiceRendered? GetServiceById(IServiceRenderedDAL serviceRenderedDAL, int id)
+        public static ServiceRendered? GetServiceById(int id, IServiceRenderedDAL serviceRenderedDAL)
         {
-            return serviceRenderedDAL.GetServiceRendered(id);
+            return serviceRenderedDAL.GetRequest(id);
         }
-
-
-
-
-
     }
 }

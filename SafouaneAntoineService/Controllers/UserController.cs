@@ -10,7 +10,7 @@ namespace SafouaneAntoineService.Controllers
     {
         private readonly IUserDAL _user;
 
-        public UserController(IUserDAL _user, IServiceOfferDAL _serviceOffer)
+        public UserController(IUserDAL _user)
         {
             this._user = _user;
         }

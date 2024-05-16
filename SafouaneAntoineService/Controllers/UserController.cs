@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using SafouaneAntoineService.DAL.IDAL;
 using SafouaneAntoineService.Models;
@@ -73,6 +71,18 @@ namespace SafouaneAntoineService.Controllers
             HttpContext.Session.Clear();
             TempData["State"] = "Disconnect";
             return RedirectToAction("Authenticate");
+        }
+
+        public IActionResult Account()
+        {
+            User? user = ControllerHelper.GetUserLoggedIn(this);
+            if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
+            return View(user);
+        }
+
+        public IActionResult ModifyContact()
+        {
+            return View();
         }
     }
 }

@@ -54,15 +54,15 @@ namespace SafouaneAntoineService.Models
             this.category = category;
         }
 
-        public ServiceOffer(ServiceOfferViewModel so, User user)
+        public ServiceOffer(string type, string? description, ServiceCategory category, User user)
         {
-            this.type = so.Type;
-            this.description = so.Description;
-            this.category = new ServiceCategory(so.CategoryName);
+            this.type = type;
+            this.description = description;
+            this.category = category;
             this.provider = user;
         }
 
-        public bool Publish(IServiceOfferDAL service_offer_dal)
+        public bool SaveOffer(IServiceOfferDAL service_offer_dal)
         {
             return service_offer_dal.PublishOffer(this);
         }
@@ -91,6 +91,11 @@ namespace SafouaneAntoineService.Models
                 notif.Send(notification_DAL);
             }
             return ret;
+        }
+
+        public static ServiceOffer? GetOffer(int id, IServiceOfferDAL serviceOfferDAL)
+        {
+            return serviceOfferDAL.GetService(id);
         }
 
         public void AddReview(Review review)

@@ -34,15 +34,11 @@ namespace SafouaneAntoineService.ViewModels
             set { username = value; }
         }
 
-        //public int Timecredits { get; set; } = 10;
-
         public int Timecredits
         {
             get { return timecredits; }
             set { timecredits = 10; }
         }
-
-
 
         [DataType(DataType.EmailAddress), Required(ErrorMessage = "Email Invalid!")]
         public string Email
@@ -50,7 +46,6 @@ namespace SafouaneAntoineService.ViewModels
             get { return email; }
             set { email = value; }
         }
-
 
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password, ErrorMessage = "Invalid password.")]

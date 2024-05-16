@@ -1,4 +1,6 @@
-﻿namespace SafouaneAntoineService.Models
+﻿using SafouaneAntoineService.DAL.IDAL;
+
+namespace SafouaneAntoineService.Models
 {
     public class ServiceCategory
     {
@@ -19,6 +21,11 @@
         public ServiceCategory(string name)
         {
             this.name = name;
+        }
+
+        public static List<ServiceCategory> GetCategories(IServiceCategoryDAL serviceCategoryDAL)
+        {
+            return serviceCategoryDAL.GetCategories();
         }
     }
 }

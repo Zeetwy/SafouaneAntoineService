@@ -107,38 +107,53 @@ namespace SafouaneAntoineService.Models
 
         public List<ServiceOffer> GetOffers(IServiceOfferDAL service_offer_DAL)
         {
-            if (this.offers != null)
+            if (this.offers is null)
             {
-                return this.offers;
+                this.offers = service_offer_DAL.GetOffersByUser(this);
             }
-            this.offers = service_offer_DAL.GetOffersByUser(this);
             return this.offers;
         }
 
         public List<ServiceRendered> GetServicesRenderedByUserr(IServiceRenderedDAL service_rendered_DAL)
         {
-            if (this.renders != null)
+            if (this.renders is null)
             {
-                return this.renders;
+                this.renders = service_rendered_DAL.GetServicesRenderedByUser(this);
             }
-            this.renders = service_rendered_DAL.GetServicesRenderedByUser(this);
-
             return this.renders;
+        }
+
+        public List<Notification> GetNotifications(INotificationDAL notificationDAL)
+        {
+            if (this.notifications is null)
+            {
+                this.notifications = notificationDAL.GetNotifications(this);
+            }
+            return this.notifications;
+        }
+
+        public bool Publish(ServiceOffer so, IServiceOfferDAL serviceOfferDAL)
+        {
+            this.GetOffers(serviceOfferDAL).Add(so);
+            return so.SaveOffer(serviceOfferDAL);
         }
 
         public bool Debit(int amount, IUserDAL userDAL)
         {
             timecredits -= amount;
-            return userDAL.Debit(this, amount); 
+            return userDAL.Debit(this, amount);
         }
 
         public bool Credit(int amount, IUserDAL userDAL)
         {
             timecredits += amount;
-            return userDAL.Credit(this, amount); 
+            return userDAL.Credit(this, amount);
         }
 
-
-
+        public bool DeleteOffer(ServiceOffer offer, IServiceOfferDAL serviceOfferDAL)
+        {
+            this.GetOffers(serviceOfferDAL).Find(so => so.Id == offer.Id);
+            return serviceOfferDAL.DeleteOffer(offer);
+        }
     }
 }

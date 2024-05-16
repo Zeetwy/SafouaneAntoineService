@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SafouaneAntoineService.DAL;
 using SafouaneAntoineService.DAL.IDAL;
 using SafouaneAntoineService.Models;
 using SafouaneAntoineService.ViewModels;
@@ -97,33 +96,5 @@ namespace SafouaneAntoineService.Controllers
 
             return RedirectToAction("ViewProvidedServices", "ServiceRendered");
         }
-
-        /*  [HttpGet]
-          public IActionResult ViewDetailsServiceRendered(int id)
-          {
-              User? currentUser = ControllerHelper.GetUserLoggedIn(this);
-              if (currentUser == null)
-              {
-                  return ControllerHelper.NeedToBeLoggedIn(this);
-              }
-
-              ServiceRendered? serviceRendered = this._serviceRendered.GetServiceRendered(id);
-
-              // return View(new { ServiceOffer = serviceOffer, CurrentUser = currentUser });
-              ServiceRenderedDetailsViewModel srvm = new ServiceRenderedDetailsViewModel
-              {
-                  ServiceRendered = serviceRendered,
-                  CurrentUser = currentUser
-              };
-
-              return View(srvm);
-          }
-         */
-
-
-
-
-
-
     }
 }

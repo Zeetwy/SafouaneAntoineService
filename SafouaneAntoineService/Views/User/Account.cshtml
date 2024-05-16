@@ -1,0 +1,9 @@
+﻿@model User
+<table>
+	<tr><th>Username: </th> <td>@Model.Username</td></tr>
+	<tr><th>Firstname: </th> <td>@Model.Firstname</td></tr>
+	<tr><th>Lastname: </th> <td>@Model.Lastname</td></tr>
+	<tr><th>Email: </th> <td>@Model.Email</td></tr>
+	<tr><th>Credits: </th> <td>@Model.Timecredits</td></tr>
+</table>
+<a class="btn btn-primary" asp-controller="User" asp-action="ModifyContact">Update Contact Info</a>

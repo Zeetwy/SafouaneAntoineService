@@ -11,5 +11,6 @@ namespace SafouaneAntoineService.DAL.IDAL
         public bool PublishOffer(ServiceOffer so);
         public bool RequestService(ServiceOffer offer, User customer);
         public bool ServiceWasRequested(ServiceOffer offer, User customer);
+        public bool DeleteOffer(ServiceOffer offer);
     }
 }

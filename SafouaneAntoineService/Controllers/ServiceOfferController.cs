@@ -25,7 +25,7 @@ namespace SafouaneAntoineService.Controllers
             if (customer is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
 
             // Créer une instance de ServiceOffer (assurez-vous d'injecter IServiceOfferDAL dans votre contrôleur)
-            ServiceOffer? serviceOffer = this._serviceOffer.GetService(id);
+            ServiceOffer? serviceOffer = ServiceOffer.GetOffer(id, _serviceOffer);
 
             // Appeler la méthode Request sur l'instance de ServiceOffer
             return View("Request", serviceOffer is not null && serviceOffer.Request(customer, this._serviceOffer, this._notification));
@@ -52,7 +52,7 @@ namespace SafouaneAntoineService.Controllers
                 return ControllerHelper.NeedToBeLoggedIn(this);
             }
 
-            ServiceOffer? serviceOffer = this._serviceOffer.GetService(id);
+            ServiceOffer? serviceOffer = ServiceOffer.GetOffer(id, _serviceOffer);
 
             // return View(new { ServiceOffer = serviceOffer, CurrentUser = currentUser });
             ServiceDetailsViewModel svm = new ServiceDetailsViewModel
@@ -69,14 +69,14 @@ namespace SafouaneAntoineService.Controllers
         {
             User? user = ControllerHelper.GetUserLoggedIn(this);
             if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
-            return View(user.GetOffers(this._serviceOffer));
+            return View(user.GetOffers(_serviceOffer));
         }
 
         public IActionResult PublishOffer()
         {
-            ViewBag.Categories = this._serviceCategory.GetCategories();
             if (ControllerHelper.GetUserLoggedIn(this) is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
-            return View();
+			ViewBag.Categories = ServiceCategory.GetCategories(_serviceCategory);
+			return View();
         }
 
         [HttpPost]
@@ -86,19 +86,26 @@ namespace SafouaneAntoineService.Controllers
             User? user = ControllerHelper.GetUserLoggedIn(this);
             if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
 
-            ServiceOffer offer = new ServiceOffer(so, user);
-            if (ModelState.IsValid && offer.Publish(this._serviceOffer))
+            if (ModelState.IsValid)
             {
-                TempData["Message"] = "Offer published successfully.";
-                return RedirectToAction("ManageOffers", "ServiceOffer");
+				ServiceOffer offer = new ServiceOffer(so.Type, so.Description, new ServiceCategory(so.CategoryName), user);
+                if (user.Publish(offer, _serviceOffer))
+                {
+                    TempData["Message"] = "Offer published successfully.";
+                    return RedirectToAction("ManageOffers", "ServiceOffer");
+                }
             }
-            return RedirectToAction("PublishOffer", "ServiceOffer");
+            return View(so);
         }
 
         [HttpGet]
         public IActionResult DeleteOffer(int id)
         {
-            return View(); // TODO
+            User? user = ControllerHelper.GetUserLoggedIn(this);
+            if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
+            ServiceOffer? offer = ServiceOffer.GetOffer(id, _serviceOffer);
+
+            return View(offer is not null && user.DeleteOffer(offer, _serviceOffer)); // TODO
         }
     }
 }

@@ -236,5 +236,11 @@ namespace SafouaneAntoineService.DAL
             catch (SqlException) { return false; }
             return was_requested;
         }
-    }
+
+		public bool DeleteOffer(ServiceOffer offer)
+        {
+            const string query = "";
+            return false; // TODO
+        }
+	}
 }

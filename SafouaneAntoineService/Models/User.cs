@@ -107,7 +107,7 @@ namespace SafouaneAntoineService.Models
 
         public List<ServiceOffer> GetOffers(IServiceOfferDAL service_offer_DAL)
         {
-            if (this.offers == null)
+            if (this.offers is null)
             {
                 this.offers = service_offer_DAL.GetOffersByUser(this);
             }
@@ -116,7 +116,7 @@ namespace SafouaneAntoineService.Models
 
         public List<ServiceRendered> GetServicesRenderedByUserr(IServiceRenderedDAL service_rendered_DAL)
         {
-            if (this.renders == null)
+            if (this.renders is null)
             {
                 this.renders = service_rendered_DAL.GetServicesRenderedByUser(this);
             }
@@ -125,11 +125,23 @@ namespace SafouaneAntoineService.Models
 
         public List<Notification> GetNotifications(INotificationDAL notificationDAL)
         {
-            if (this.notifications == null)
+            if (this.notifications is null)
             {
                 this.notifications = notificationDAL.GetNotifications(this);
             }
             return this.notifications;
+        }
+
+        public bool Publish(ServiceOffer so, IServiceOfferDAL serviceOfferDAL)
+        {
+            this.GetOffers(serviceOfferDAL).Add(so);
+            return so.SaveOffer(serviceOfferDAL);
+        }
+
+        public bool DeleteOffer(ServiceOffer offer, IServiceOfferDAL serviceOfferDAL)
+        {
+            this.GetOffers(serviceOfferDAL).Find(so => so.Id == offer.Id);
+            return serviceOfferDAL.DeleteOffer(offer);
         }
     }
 }

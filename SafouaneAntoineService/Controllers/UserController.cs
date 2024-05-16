@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using SafouaneAntoineService.DAL.IDAL;
 using SafouaneAntoineService.Models;

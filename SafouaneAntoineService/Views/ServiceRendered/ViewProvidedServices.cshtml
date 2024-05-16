@@ -24,8 +24,16 @@ else
         {
             <tr>
                 <td>@sr.Servicestatus</td>
-                <td>@sr.Date</td>
-                <td>@sr.NumberOfHours</td>
+                @if (sr.Servicestatus != ServiceRendered.Status.Requested)
+                {
+                    <td>@sr.Date</td>
+                    <td>@sr.NumberOfHours</td>
+                }
+                else
+                {
+                    <td>Not Yet Rendered</td>
+                    <td>Not Yet Rendered</td>
+                }
             </tr>
         }
     </table>

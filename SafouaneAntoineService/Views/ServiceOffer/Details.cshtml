@@ -19,7 +19,7 @@
             <td>
                 @if (Model.CurrentUser != null && Model.CurrentUser.Id != Model.ServiceOffer.Provider.Id)
                 {
-                    <a asp-controller="ServiceOffer" asp-action="MakeARequest" asp-route-id="@Model.ServiceOffer.Id">Faire une demande</a>
+                    <a asp-controller="ServiceOffer" asp-action="MakeARequest" asp-route-id="@Model.ServiceOffer.Id">Make a request</a>
                 }
             </td>
         </tr>

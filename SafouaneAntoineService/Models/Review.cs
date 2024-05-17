@@ -9,7 +9,7 @@ namespace SafouaneAntoineService.Models
         private int rating;
         private string comment;
         private User customer;
-        private ServiceOffer service;
+        private ServiceRendered service;
         public int Id
         {
             get { return id; }
@@ -33,12 +33,12 @@ namespace SafouaneAntoineService.Models
             get { return customer; }
             set { customer = value; }
         }
-        public ServiceOffer Service
+        public ServiceRendered Service
         {
             get { return service; }
             set { service = value; }
         }
-        public Review(int rating, string comment, User user, ServiceOffer service)
+        public Review(int rating, string comment, User user, ServiceRendered service)
         {
             this.rating = rating;
             this.comment = comment;

@@ -5,31 +5,30 @@ using SafouaneAntoineService.Models;
 
 namespace SafouaneAntoineService.Controllers
 {
-    public class ReviewCcontroller : Controller
+    public class ReviewController : Controller
     {
         private readonly IReviewDAL _review;
-        private readonly IServiceOfferDAL _offer;
+        private readonly IServiceRenderedDAL _service;
 
-        public ReviewCcontroller(IReviewDAL review, IServiceOfferDAL offer)
+        public ReviewController(IReviewDAL review, IServiceRenderedDAL service)
         {
-            this._review = review;
-            _offer = offer;
+            _review = review;
+            _service = service;
         }
 
         public IActionResult RateAService(int id)
         {
             User? currentUser = ControllerHelper.GetUserLoggedIn(this);
 
-            //Mauvais, il faut récuperer l'offre qui est attachée au service !
-            ServiceOffer? serviceOffer = ServiceOffer.GetDetails(_offer, id);
+            ServiceRendered? serviceRendered = ServiceRendered.GetServiceById(id, _service);
 
-            if (serviceOffer == null)
+            if (serviceRendered == null)
             {
-                TempData["Message"] = "Service offer not found.";
+                TempData["Message"] = "Service rendered not found.";
                 return RedirectToAction("Index", "Home");
             }
 
-            HttpContext.Session.SetString("ServiceOffer", JsonConvert.SerializeObject(serviceOffer));
+            HttpContext.Session.SetString("ServiceRendered", JsonConvert.SerializeObject(serviceRendered));
 
             return View();
         }
@@ -43,10 +42,10 @@ namespace SafouaneAntoineService.Controllers
                 User? currentUser = ControllerHelper.GetUserLoggedIn(this);
                 if (currentUser is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
 
-                string? serviceOfferSession = HttpContext.Session.GetString("ServiceOffer");
-                ServiceOffer? serviceOffer = JsonConvert.DeserializeObject<ServiceOffer>(serviceOfferSession);
+                string? serviceRenderedSession = HttpContext.Session.GetString("ServiceRendered");
+                ServiceRendered? serviceRendered = JsonConvert.DeserializeObject<ServiceRendered>(serviceRenderedSession);
 
-                Review review = new Review(rating, comment, currentUser, serviceOffer);
+                Review review = new Review(rating, comment, currentUser, serviceRendered);
 
                 if (review.SaveReview(_review))
                     TempData["Message"] = "Review created successfully!";
@@ -57,8 +56,5 @@ namespace SafouaneAntoineService.Controllers
             }
             return View();
         }
-
-
-
     }
 }

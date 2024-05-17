@@ -45,7 +45,7 @@ namespace SafouaneAntoineService.DAL
             }
             catch (Exception)
             {
-                return new List<ServiceOffer>(); // return an empty list in case of an error
+                return new List<ServiceOffer>(); //retourne une liste vide en cas d'erreur
             }
         }
 

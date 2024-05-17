@@ -19,6 +19,8 @@ namespace SafouaneAntoineService.Models
         private readonly User provider;
         private readonly User customer;
 
+        private List<Review>? reviews;
+
         public int Id { get => id; }
         public Status Servicestatus { get => servicestatus; }
 
@@ -106,6 +108,15 @@ namespace SafouaneAntoineService.Models
         public static ServiceRendered? GetServiceById(int id, IServiceRenderedDAL serviceRenderedDAL)
         {
             return serviceRenderedDAL.GetRequest(id);
+        }
+
+        public void AddReview(Review review)
+        {
+            if (reviews is null)
+            {
+                reviews = new List<Review>();
+            }
+            this.reviews.Add(review);
         }
     }
 }

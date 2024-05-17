@@ -17,8 +17,8 @@ namespace SafouaneAntoineService.DAL
         {
             List<Review> reviews = new List<Review>();
             string query = "SELECT * FROM [Review] " +
-                "Join [ServiceOffer] ON [Review].service_id = [ServiceOffer].id " +
-                "Join [User] ON [ServiceOffer].user_id = [User].Id " +
+                "Join [ServiceRendered] ON [Review].service_id = [ServiceRendered].id " +
+                "Join [User] ON [ServiceRendered].user_id = [User].Id " +
                 "Where [User].Id = @idUser";
             using (SqlConnection connection = new SqlConnection(connection_string))
             {

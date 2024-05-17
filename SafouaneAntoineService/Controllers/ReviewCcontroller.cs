@@ -16,6 +16,8 @@ namespace SafouaneAntoineService.Controllers
             _service = service;
         }
 
+
+        //Unimplemented
         public IActionResult RateAService(int id)
         {
             User? currentUser = ControllerHelper.GetUserLoggedIn(this);
@@ -33,6 +35,7 @@ namespace SafouaneAntoineService.Controllers
             return View();
         }
 
+        //Unimplemented
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public IActionResult RateAService(int rating, string comment)

@@ -27,13 +27,11 @@ namespace SafouaneAntoineService.Controllers
             User? customer = ControllerHelper.GetUserLoggedIn(this);
             if (customer is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
 
-            // Créer une instance de ServiceOffer (assurez-vous d'injecter IServiceOfferDAL dans votre contrôleur)
             ServiceOffer? serviceOffer = ServiceOffer.GetOffer(id, _serviceOffer);
 
             _user.RefreshInfo(ref customer);
             HttpContext.Session.SetString("User", JsonConvert.SerializeObject(customer));
 
-            // Appeler la méthode Request sur l'instance de ServiceOffer
             return View("Request", serviceOffer is not null && customer.Timecredits > 0 && serviceOffer.Request(customer, this._serviceOffer, this._notification));
         }
 

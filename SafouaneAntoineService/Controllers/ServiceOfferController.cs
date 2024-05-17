@@ -30,10 +30,12 @@ namespace SafouaneAntoineService.Controllers
             // Créer une instance de ServiceOffer (assurez-vous d'injecter IServiceOfferDAL dans votre contrôleur)
             ServiceOffer? serviceOffer = ServiceOffer.GetOffer(id, _serviceOffer);
 
+            _user.RefreshInfo(ref customer);
+            HttpContext.Session.SetString("User", JsonConvert.SerializeObject(customer));
+
             // Appeler la méthode Request sur l'instance de ServiceOffer
             return View("Request", serviceOffer is not null && customer.Timecredits > 0 && serviceOffer.Request(customer, this._serviceOffer, this._notification));
         }
-
 
         public IActionResult ViewServices()
         {
@@ -65,7 +67,6 @@ namespace SafouaneAntoineService.Controllers
 
             return View(svm);
         }
-
        
         public IActionResult ManageOffers()
         {
@@ -107,7 +108,7 @@ namespace SafouaneAntoineService.Controllers
             if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
             ServiceOffer? offer = ServiceOffer.GetOffer(id, _serviceOffer);
 
-            return View(offer is not null && user.DeleteOffer(offer, _serviceOffer)); // TODO
+            return View(offer is not null && user.DeleteOffer(offer, _serviceOffer)); // Unimplemented
         }
     }
 }

@@ -8,6 +8,7 @@ namespace SafouaneAntoineService.DAL.IDAL
         public bool SaveAccount(User user);
         public bool Credit(User u, int amount);
         public bool Debit(User u, int amount);
-        //public User RefreshInfo(User user);
+        public void RefreshInfo(ref User user);
+        public bool ChangeContact(User user, string email);
     }
 }

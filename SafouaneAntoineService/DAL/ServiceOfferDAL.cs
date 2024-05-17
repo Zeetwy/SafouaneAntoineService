@@ -27,12 +27,10 @@ namespace SafouaneAntoineService.DAL
 
                     connection.Open();
 
-                    using (SqlDataReader reader = cmd.ExecuteReader()) // ExecuteReader() est appelée pour exécuter la commande SQL et obtenir un objet SqlDataReader pour lire les résultats.
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            //chaque ligne de résultat est lue à l'aide de la méthode Read() du SqlDataReader. Pour chaque ligne lue, un nouvel objet ServiceOffer est créé et initialisé avec les valeurs des colonnes de la base de données correspondantes
-
                             ServiceOffer serviceOffer = new ServiceOffer(
                                 reader.GetInt32("id"),
                                 reader.GetString("type"),
@@ -43,7 +41,7 @@ namespace SafouaneAntoineService.DAL
                     }
                 }
 
-                return serviceOffers; // Une fois toutes les offres de service récupérées et ajoutées à la liste serviceOffers, la liste est renvoyée comme résultat de la méthode.
+                return serviceOffers;
             }
             catch (Exception)
             {
@@ -54,25 +52,24 @@ namespace SafouaneAntoineService.DAL
         //Pour afficher un service en particulier
         public ServiceOffer? GetService(int id)
         {
-            //jointure pour récupérer les informations de l'utilisateur fournisseur et de la catégorie de service correspondante.
             const string query = @"SELECT [so].[id], [so].[type], [so].[description], [so].[category_id], [so].[user_id], [sc].[name], [u].[Firstname], [u].[Lastname], [u].[Email]
     FROM [ServiceOffer] so
     JOIN [User] u ON [so].user_id = [u].[Id]
     JOIN [ServiceCategory] sc ON [so].[category_id] = [sc].[id]
     WHERE [so].[id] = @id";
 
-            ServiceOffer? serviceOffer = null; //C'est cette variable qui sera renvoyée à la fin de la méthode avec les détails de l'offre de service récupérée.
+            ServiceOffer? serviceOffer = null;
 
             try
             {
                 using (SqlConnection connection = new SqlConnection(connection_string))
                 {
                     SqlCommand cmd = new SqlCommand(query, connection);
-                    cmd.Parameters.AddWithValue("id", id); //on ajoute un paramètre nommé id avec la valeur de l'ID du service qu'on souhaite récupérer
+                    cmd.Parameters.AddWithValue("id", id);
 
                     connection.Open();
 
-                    using (SqlDataReader reader = cmd.ExecuteReader()) //on lit la requete
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -233,7 +230,7 @@ namespace SafouaneAntoineService.DAL
 		public bool DeleteOffer(ServiceOffer offer)
         {
             const string query = "";
-            return false; // TODO
+            return false; // Unimplemented
         }
 	}
 }

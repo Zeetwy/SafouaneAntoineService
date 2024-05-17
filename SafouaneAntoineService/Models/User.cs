@@ -1,5 +1,4 @@
-﻿using SafouaneAntoineService.DAL;
-using SafouaneAntoineService.DAL.IDAL;
+﻿using SafouaneAntoineService.DAL.IDAL;
 using SafouaneAntoineService.ViewModels;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
@@ -51,7 +50,7 @@ namespace SafouaneAntoineService.Models
         public int Timecredits
         {
             get { return timecredits; }
-            set { timecredits = 10; }
+            set { timecredits = value; }
         }
 
         [DataType(DataType.EmailAddress), Required(ErrorMessage = "Email Invalid!")]
@@ -84,7 +83,6 @@ namespace SafouaneAntoineService.Models
             this.password = password ?? string.Empty;
         }
 
-        // constructeur pour mon UserViewModel
         public User(UserViewModel userVm)
         {
             lastname = userVm.Lastname;
@@ -95,7 +93,6 @@ namespace SafouaneAntoineService.Models
             password = userVm.Password;
         }
 
-        //ces méthodes délèguent la logique métier à une implémentation spécifique de l'interface IUserDAL, qui est injectée en tant que dépendance.
         public static User? Authenticate(string username, string password, IUserDAL userDAL)
         {
             return userDAL.Authenticate(username, password);
@@ -114,7 +111,7 @@ namespace SafouaneAntoineService.Models
             return this.offers;
         }
 
-        public List<ServiceRendered> GetServicesRenderedByUserr(IServiceRenderedDAL service_rendered_DAL)
+        public List<ServiceRendered> GetServicesRenderedByUser(IServiceRenderedDAL service_rendered_DAL)
         {
             if (this.renders is null)
             {
@@ -154,6 +151,11 @@ namespace SafouaneAntoineService.Models
         {
             this.GetOffers(serviceOfferDAL).Find(so => so.Id == offer.Id);
             return serviceOfferDAL.DeleteOffer(offer);
+        }
+
+        public bool ChangeContact(string email, IUserDAL userDAL)
+        {
+            return userDAL.ChangeContact(this, email);
         }
     }
 }

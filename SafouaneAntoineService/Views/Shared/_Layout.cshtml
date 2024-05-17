@@ -18,6 +18,7 @@
                             string? userSession = Context.Session.GetString("User");
                             if (!string.IsNullOrEmpty(userSession))
                             {
+                                <partial name="_Account" />
                                 <partial name="_Disconnect" />
                                 <partial name="_Notifications" />
                             }

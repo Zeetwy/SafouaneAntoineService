@@ -1,5 +1,4 @@
 ﻿using SafouaneAntoineService.DAL.IDAL;
-using SafouaneAntoineService.ViewModels;
 
 namespace SafouaneAntoineService.Models
 {

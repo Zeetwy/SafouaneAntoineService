@@ -186,7 +186,7 @@ namespace SafouaneAntoineService.DAL
             using (SqlConnection connection = new SqlConnection(this.connection_string))
             {
                 SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@customer_id", user.Id); // Corrected parameter name
+                cmd.Parameters.AddWithValue("@customer_id", user.Id);
 
                 connection.Open();
                 using (var reader = cmd.ExecuteReader())
@@ -198,7 +198,6 @@ namespace SafouaneAntoineService.DAL
                         DateTime? date = reader.IsDBNull("Date") ? null : reader.GetDateTime("Date");
                         int numberOfHours = reader.IsDBNull("NumberOfHours") ? 0 : reader.GetInt32("NumberOfHours");
 
-                        // Create ServiceRendered object and add to the list
                         ServiceRendered serviceRendered = new ServiceRendered(id, status, null, null, user, numberOfHours, date);
                         servicesrendered.Add(serviceRendered);
                     }

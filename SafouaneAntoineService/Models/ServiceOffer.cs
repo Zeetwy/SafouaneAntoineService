@@ -1,6 +1,4 @@
-﻿using SafouaneAntoineService.DAL;
-using SafouaneAntoineService.DAL.IDAL;
-using SafouaneAntoineService.ViewModels;
+﻿using SafouaneAntoineService.DAL.IDAL;
 using System.ComponentModel.DataAnnotations;
 namespace SafouaneAntoineService.Models
 {
@@ -44,7 +42,6 @@ namespace SafouaneAntoineService.Models
             set => category = value;
         }
 
-        //Constructeur pour pouvoir afficher les détails d'un service : 
         public ServiceOffer(int id, string type, string? description, ServiceCategory? category = null, User? provider = null)
         {
             this.id = id;
@@ -83,9 +80,8 @@ namespace SafouaneAntoineService.Models
             bool ret = false;
             if (customer.Id != this.Provider.Id && !service_offer_DAL.ServiceWasRequested(this, customer))
             {
-                ret = service_offer_DAL.RequestService(this, customer); // Inserts request in database
+                ret = service_offer_DAL.RequestService(this, customer);
 
-                // Créer le message à envoyer dans la notification
                 string message = $"Le client {customer.Firstname} {customer.Lastname} a fait une demande pour votre service {Id}, voici son email {customer.Email}";
                 Notification notif = new Notification(Provider, message);
                 notif.Send(notification_DAL);

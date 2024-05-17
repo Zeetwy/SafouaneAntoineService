@@ -1,1 +1,8 @@
 ﻿@model SafouaneAntoineService.ViewModels.ModifyContactViewModel
+
+<form method="post" asp-controller="User" asp-action="ModifyContact">
+	<label asp-for="Email">Email: </label>
+	<input asp-for="Email" />
+	<span asp-validation-for="Email" style="color:red"></span>
+	<input type="submit" value="Confirm"/>
+</form>

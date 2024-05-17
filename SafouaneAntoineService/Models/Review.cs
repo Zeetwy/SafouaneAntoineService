@@ -52,7 +52,7 @@ namespace SafouaneAntoineService.Models
             this.rating = rating;
             this.comment = comment;
         }
-        public static List<Review> GetReviewByDriver(IReviewDAL review_DAL, User user)
+        public static List<Review> GetReviewByUser(IReviewDAL review_DAL, User user)
         {
             return review_DAL.GetReviewsByUser(user);
         }

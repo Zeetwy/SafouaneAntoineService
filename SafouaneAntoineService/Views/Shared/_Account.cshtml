@@ -1,12 +1,1 @@
-﻿@{
-	User? user = null;
-	string? user_session_string = Context.Session.GetString("User");
-	if (!string.IsNullOrEmpty(user_session_string))
-	{
-		user = Newtonsoft.Json.JsonConvert.DeserializeObject<User>(user_session_string);
-	}
-}
-@if (user is not null)
-{
-	<div>Welcome: </div><a asp-controller="User" asp-action="Account">@user.Username</a>
-}
+﻿<a class="btn btn-primary" asp-controller="User" asp-action="Account">Account</a>

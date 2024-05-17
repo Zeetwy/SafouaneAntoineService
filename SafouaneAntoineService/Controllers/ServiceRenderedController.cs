@@ -69,7 +69,7 @@ namespace SafouaneAntoineService.Controllers
             User? user = ControllerHelper.GetUserLoggedIn(this);
             if (user is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
 
-            return View(user.GetServicesRenderedByUserr(this._serviceRendered));
+            return View(user.GetServicesRenderedByUser(this._serviceRendered));
         }
 
         public IActionResult ValidateService(int id)

@@ -9,7 +9,7 @@ namespace SafouaneAntoineService.Models
         private string? description;
         private User? provider;
         private ServiceCategory? category;
-       
+
 
         public int Id
         {
@@ -31,15 +31,31 @@ namespace SafouaneAntoineService.Models
             private set => description = value;
         }
 
-        public User Provider
+        /* public User Provider
+         {
+             get => provider ?? throw new Exception("No provider was set.");
+             private set => provider = value;
+         } */
+
+        public User? Provider
         {
-            get => provider ?? throw new Exception("No provider was set.");
+            get => provider; 
             private set => provider = value;
         }
-        public ServiceCategory Category
+
+        /*public ServiceCategory? Category
         {
             get => category ?? throw new Exception("No category was set.");
             set => category = value;
+        } */
+        public ServiceCategory? Category
+        {
+            get => category;
+            set => category = value;
+        }
+
+        public ServiceOffer()
+        {
         }
 
         public ServiceOffer(int id, string type, string? description, ServiceCategory? category = null, User? provider = null)
@@ -99,6 +115,6 @@ namespace SafouaneAntoineService.Models
             return serviceRenderedDAL.GetRequests(this);
         }
 
-       
+
     }
 }

@@ -17,10 +17,11 @@ namespace SafouaneAntoineService.Controllers
         }
 
 
-        //Unimplemented
         public IActionResult RateAService(int id)
         {
             User? currentUser = ControllerHelper.GetUserLoggedIn(this);
+            if (currentUser is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
+
 
             ServiceRendered? serviceRendered = ServiceRendered.GetServiceById(id, _service);
 
@@ -35,7 +36,6 @@ namespace SafouaneAntoineService.Controllers
             return View();
         }
 
-        //Unimplemented
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public IActionResult RateAService(int rating, string comment)
@@ -46,17 +46,37 @@ namespace SafouaneAntoineService.Controllers
                 if (currentUser is null) { return ControllerHelper.NeedToBeLoggedIn(this); }
 
                 string? serviceRenderedSession = HttpContext.Session.GetString("ServiceRendered");
+
+                if (serviceRenderedSession == null)
+                {
+                    TempData["Message"] = "Error: Service rendered not found in session.";
+                    return RedirectToAction("Index", "Home"); 
+                }
+
                 ServiceRendered? serviceRendered = JsonConvert.DeserializeObject<ServiceRendered>(serviceRenderedSession);
 
-                Review review = new Review(rating, comment, currentUser, serviceRendered);
+                if (serviceRendered != null)
+                {
+                    Review review = new Review(rating, comment, currentUser, serviceRendered);
 
-                if (review.SaveReview(_review))
-                    TempData["Message"] = "Review created successfully!";
+                    if (review.SaveReview(_review))
+                    {
+                        TempData["Message"] = "Review created successfully!";
+                    }
+                    else
+                    {
+                        TempData["Message"] = "Error occurred during the creation of the review.";
+                    }
+
+                    return RedirectToAction("ViewServices", "ServiceOffer");
+                }
                 else
-                    TempData["Message"] = "Error occurred during the creation of the review.";
-
-                return RedirectToAction("ViewServices", "ServiceOffer");
+                {
+                    TempData["Message"] = "Error: Service rendered could not be loaded from session.";
+                    return RedirectToAction("Index", "Home");
+                }
             }
+
             return View();
         }
     }

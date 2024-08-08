@@ -12,6 +12,7 @@ builder.Services.AddTransient<IServiceOfferDAL>(sod => new ServiceOfferDAL(conne
 builder.Services.AddTransient<IServiceCategoryDAL>(scd => new ServiceCategoryDAL(connectionString));
 builder.Services.AddTransient<INotificationDAL>(nd => new NotificationDAL(connectionString));
 builder.Services.AddTransient<IServiceRenderedDAL>(srd => new ServiceRenderedDAL(connectionString));
+builder.Services.AddTransient<IReviewDAL>(rd => new ReviewDAL(connectionString));
 builder.Services.AddDistributedMemoryCache();
 
 // Cette ligne configure le service de session dans l'application.

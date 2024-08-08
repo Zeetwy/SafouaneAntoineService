@@ -11,7 +11,7 @@
         There are no services rendered to you.
     </div>
 }
-else 
+else
 {
     <table class="table">
         <tr>
@@ -24,16 +24,16 @@ else
         {
             <tr>
                 <td>@sr.Servicestatus</td>
-                @if (sr.Servicestatus != ServiceRendered.Status.Requested)
+                <td>@sr.Date</td>
+                <td>@sr.NumberOfHours</td>
+
+                @if (sr.Servicestatus != ServiceRendered.Status.Requested && sr.Servicestatus != ServiceRendered.Status.Archived)
                 {
-                    <td>@sr.Date</td>
-                    <td>@sr.NumberOfHours</td>
                     <td> <a asp-controller="ServiceRendered" asp-action="ValidateService" asp-route-id="@sr.Id">Validate the service</a></td>
                 }
                 else
                 {
-                    <td>Not Yet Rendered</td>
-                    <td>Not Yet Rendered</td>
+                    <td></td> 
                 }
             </tr>
         }
@@ -41,4 +41,3 @@ else
 
     <a class="btn" style="border: 3px solid black" asp-controller="ServiceOffer" asp-action="ViewServices">Return</a>
 }
-

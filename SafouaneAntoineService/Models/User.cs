@@ -135,16 +135,29 @@ namespace SafouaneAntoineService.Models
             return so.SaveOffer(serviceOfferDAL);
         }
 
-        public bool Debit(int amount, IUserDAL userDAL)
+        
+        /*public bool Debit(int amount, IUserDAL userDAL)
         {
             timecredits -= amount;
             return userDAL.Debit(this, amount);
+        }¨*/
+
+        public bool Debit(int amount, IUserDAL userDAL)
+        {
+            this.timecredits -= amount; //en utilisant this on a directement la valeur du timecredits de la personne; donc maintenant dans la DAL comme on a fait le this il suffit juste de passer l'User car avant on passait amount en parametres mais maintenant avec le this comme on a deja débité/crédité c'est bon on doit juste mettre à jour la BD
+            return userDAL.Debit(this);
         }
 
-        public bool Credit(int amount, IUserDAL userDAL)
+        /*public bool Credit(int amount, IUserDAL userDAL)
         {
             timecredits += amount;
             return userDAL.Credit(this, amount);
+        } */
+
+        public bool Credit(int amount, IUserDAL userDAL)
+        {
+            this.timecredits += amount;
+            return userDAL.Credit(this);
         }
 
         public bool DeleteOffer(ServiceOffer offer, IServiceOfferDAL serviceOfferDAL)

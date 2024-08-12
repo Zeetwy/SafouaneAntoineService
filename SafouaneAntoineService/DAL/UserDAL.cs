@@ -105,7 +105,7 @@ namespace SafouaneAntoineService.DAL
             return success;
         }
 
-        public bool Debit(User u, int amount)
+       /* public bool Debit(User u, int amount)
         {
             const string query = "UPDATE [User] SET Timecredits = Timecredits - @Amount WHERE Id = @UserId";
 
@@ -119,9 +119,24 @@ namespace SafouaneAntoineService.DAL
                 int rowsAffected = command.ExecuteNonQuery();
                 return rowsAffected > 0;
             }
+        } */
+
+        public bool Debit(User u)
+        {
+            const string query = "UPDATE [User] SET Timecredits = @Timecredits WHERE Id = @UserId";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Timecredits", u.Timecredits); //là on va rechercher le timecredits en utilisant l'objet (u.Timecredits)
+                command.Parameters.AddWithValue("@UserId", u.Id);
+
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
         }
 
-        public bool Credit(User u, int amount)
+        /*public bool Credit(User u, int amount)
         {
             const string query = "UPDATE [User] SET Timecredits = Timecredits + @Amount WHERE Id = @UserId";
 
@@ -135,7 +150,23 @@ namespace SafouaneAntoineService.DAL
                 int rowsAffected = command.ExecuteNonQuery();
                 return rowsAffected > 0;
             }
+        } */
+
+        public bool Credit(User u)
+        {
+            const string query = "UPDATE [User] SET Timecredits = @Timecredits WHERE Id = @UserId";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Timecredits", u.Timecredits); //là on va rechercher le timecredits en utilisant l'objet (u.Timecredits) ce qui permet d'utiliser l'orienté objet (contrairement à avant où je mettais juste amount)
+                command.Parameters.AddWithValue("@UserId", u.Id);
+
+                connection.Open();
+                int rowsAffected = command.ExecuteNonQuery();
+                return rowsAffected > 0;
+            }
         }
+
 
         public void RefreshInfo(ref User user)
         {

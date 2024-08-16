@@ -31,23 +31,12 @@ namespace SafouaneAntoineService.Models
             private set => description = value;
         }
 
-        /* public User Provider
-         {
-             get => provider ?? throw new Exception("No provider was set.");
-             private set => provider = value;
-         } */
-
         public User? Provider
         {
             get => provider; 
             private set => provider = value;
         }
 
-        /*public ServiceCategory? Category
-        {
-            get => category ?? throw new Exception("No category was set.");
-            set => category = value;
-        } */
         public ServiceCategory? Category
         {
             get => category;
